@@ -1,0 +1,12 @@
+{
+  "name": "Race Pulse",
+  "domain": "race_pulse",
+  "documentation": "https://github.com/simply-justin/ha-racepulse",
+  "issue_tracker": "https://github.com/simply-justin/ha-racepulse/issues",
+  "codeowners": [
+    "@simply-justin"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "requirements": []
+}
