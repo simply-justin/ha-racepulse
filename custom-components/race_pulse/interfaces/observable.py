@@ -1,18 +1,21 @@
 from abc import abstractmethod
-from . import Notifiable
+from typing import Protocol, Any, TYPE_CHECKING
 
-class Observable:
+if TYPE_CHECKING:
+    from .notifiable import Notifiable
+
+class Observable(Protocol):
     """
-    The Observer interface declares the update method, which is called by
-    subjects (Notifiable) to notify observers of changes.
+    Observer interface for receiving updates from subjects.
     """
 
     @abstractmethod
-    def update(self, subject: Notifiable) -> None:
+    def update(self, subject: "Notifiable", message: Any) -> None:
         """
         Receive an update from the subject.
 
         Args:
-            subject (Notifiable): The subject instance sending the update.
+            subject: The subject sending the update.
+            message: The event or telemetry payload.
         """
         pass
