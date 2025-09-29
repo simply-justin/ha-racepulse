@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
+
 @dataclass(frozen=True)
 class Stint:
     """
@@ -14,6 +15,7 @@ class Stint:
         start_laps: Starting lap number for this stint.
         lap_time: Best lap time achieved in this stint (string).
     """
+
     lap_flags: Optional[int] = None
     compound: Optional[str] = None
     is_new: Optional[bool] = None
@@ -32,6 +34,7 @@ class DriverStints:
         line_position: Timing line reference.
         stints: Dictionary of stint identifiers to stint details.
     """
+
     grid_position: Optional[str] = None
     line_position: Optional[int] = None
     stints: Dict[str, Stint] = field(default_factory=dict)
@@ -45,4 +48,5 @@ class TimingApp:
     Attributes:
         drivers: Mapping of driver IDs to their stint data.
     """
+
     drivers: Dict[str, DriverStints] = field(default_factory=dict)

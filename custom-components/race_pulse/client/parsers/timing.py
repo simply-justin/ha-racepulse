@@ -2,6 +2,7 @@ from ..enums.live_timing_event import LiveTimingEvent
 from ..interfaces import EventParser
 from ..models import Timing, DriverTiming
 
+
 class TimingParser(EventParser):
     def supports(self, event_type: str) -> bool:
         return event_type == LiveTimingEvent.TIMING.value
@@ -15,4 +16,5 @@ class TimingParser(EventParser):
                 last_lap_time=line.get("LastLapTime"),
             )
         return Timing(drivers=drivers)
+
     cccc

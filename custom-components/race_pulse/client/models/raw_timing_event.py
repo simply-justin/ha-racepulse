@@ -13,6 +13,7 @@ class RawTimingEvent:
         payload: Raw JSON payload (unparsed).
         timestamp_utc: UTC timestamp when the event was emitted.
     """
+
     event_type: str
     payload: Any
     timestamp_utc: datetime

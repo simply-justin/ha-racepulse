@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
+
 @dataclass(frozen=True)
 class DriverInfo:
     """
@@ -21,6 +22,7 @@ class DriverInfo:
         country_code: ISO country code (e.g., "GBR").
         is_selected: Whether this driver is flagged as selected for display.
     """
+
     racing_number: Optional[str] = None
     broadcast_name: Optional[str] = None
     full_name: Optional[str] = None
@@ -44,4 +46,5 @@ class DriverList:
     Attributes:
         drivers: Mapping of driver IDs (usually racing numbers as strings) to driver metadata.
     """
+
     drivers: Dict[str, DriverInfo] = field(default_factory=dict)

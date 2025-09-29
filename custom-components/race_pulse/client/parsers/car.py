@@ -1,6 +1,7 @@
 from ..enums.live_timing_event import LiveTimingEvent
 from ..interfaces import EventParser
-from ..models import Car, CarTelemetry, CarTelemetryBatch
+from ..models import Car, CarTelemetry, CarTelemetrySnapshot
+
 
 class CarParser(EventParser):
     def supports(self, event_type: str) -> bool:
@@ -18,11 +19,8 @@ class CarParser(EventParser):
                 brake_percent=int(data.get("Brake", 0)),
                 drs_state=int(data.get("Drs", 0)),
             )
-        CarTelemetryBatch(
-            timestamp_utc=raw["DateTime"],
-            cars=cars
-        )
-        
+        CarTelemetryBatch(timestamp_utc=raw["DateTime"], cars=cars)
+
         return Car(
             snapshots=[
                 CarTelemetrySnapshot(

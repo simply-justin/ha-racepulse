@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class Weather:
     """
@@ -14,6 +15,7 @@ class Weather:
         wind_direction_deg: Wind direction in degrees (0–360).
         wind_speed_kph: Wind speed in kilometers per hour.
     """
+
     air_temperature: float
     humidity_percent: float
     air_pressure_hpa: float

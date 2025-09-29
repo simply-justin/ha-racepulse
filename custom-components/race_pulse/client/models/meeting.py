@@ -17,6 +17,7 @@ class SessionInfo:
         gmt_offset: Time offset from GMT as timedelta.
         path: Optional internal path identifier.
     """
+
     session_id: int
     name: str
     session_type: str
@@ -37,6 +38,7 @@ class Meeting:
         location: Meeting location (e.g., "Melbourne").
         sessions: List of sessions associated with the meeting.
     """
+
     meeting_id: int
     name: str
     location: str
@@ -52,5 +54,6 @@ class MeetingIndex:
         year: Championship year.
         meetings: All Formula 1 meetings for the year.
     """
+
     year: int
     meetings: List[Meeting] = field(default_factory=list)

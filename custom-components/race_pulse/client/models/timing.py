@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
+
 @dataclass(frozen=True)
 class Interval:
     """
@@ -10,8 +11,10 @@ class Interval:
         value: String representation of the gap (e.g. "+1.123" or "5L" for 5 laps down).
         catching: Whether the driver is closing the gap.
     """
+
     value: Optional[str] = None
     catching: Optional[bool] = None
+
 
 @dataclass(frozen=True)
 class Segment:
@@ -19,7 +22,9 @@ class Segment:
     Represents a sector segment status.
     Typical values: yellow, green, purple, pit lane, chequered flag.
     """
+
     status: str
+
 
 @dataclass(frozen=True)
 class SectorTime:
@@ -32,10 +37,12 @@ class SectorTime:
         is_personal_fastest: True if fastest sector for the driver.
         segments: Mini-sector breakdown with statuses.
     """
+
     value: Optional[str] = None
     is_overall_fastest: bool = False
     is_personal_fastest: bool = False
     segments: Dict[str, Segment] = field(default_factory=dict)
+
 
 @dataclass(frozen=True)
 class DriverTiming:
@@ -60,6 +67,7 @@ class DriverTiming:
         stopped: Whether car is stopped on track.
         status: Current status flag (yellow, pit, chequered, etc.).
     """
+
     gap_to_leader: Optional[str] = None
     interval_to_ahead: Optional[Interval] = None
     racing_line: Optional[int] = None
@@ -86,4 +94,5 @@ class Timing:
     Attributes:
         drivers: Mapping of driver IDs to their live timing data.
     """
+
     drivers: Dict[str, DriverTiming] = field(default_factory=dict)

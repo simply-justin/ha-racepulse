@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+
 @dataclass(frozen=True)
 class Heartbeat:
     """
@@ -9,4 +10,5 @@ class Heartbeat:
     Attributes:
         timestamp_utc: UTC time when the heartbeat was emitted.
     """
+
     timestamp_utc: datetime = datetime.utcnow()

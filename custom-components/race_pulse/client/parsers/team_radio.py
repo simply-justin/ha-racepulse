@@ -3,6 +3,7 @@ from ..enums.live_timing_event import LiveTimingEvent
 from ..interfaces import EventParser
 from ..models import TeamRadio, TeamRadioCapture
 
+
 class TeamRadioParser(EventParser):
     def supports(self, event_type: str) -> bool:
         return event_type == LiveTimingEvent.TEAM_RADIO.value

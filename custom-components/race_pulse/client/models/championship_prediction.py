@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 
+
 @dataclass(frozen=True)
 class DriverPrediction:
     """
@@ -13,6 +14,7 @@ class DriverPrediction:
         current_points: Current championship points.
         predicted_points: Predicted championship points.
     """
+
     racing_number: Optional[str] = None
     current_position: Optional[int] = None
     predicted_position: Optional[int] = None
@@ -32,6 +34,7 @@ class TeamPrediction:
         current_points: Current championship points.
         predicted_points: Predicted championship points.
     """
+
     team_name: Optional[str] = None
     current_position: Optional[int] = None
     predicted_position: Optional[int] = None
@@ -48,5 +51,6 @@ class ChampionshipPrediction:
         drivers: Mapping of driver IDs to driver predictions.
         teams: Mapping of team names to team predictions.
     """
+
     drivers: Dict[str, DriverPrediction] = field(default_factory=dict)
     teams: Dict[str, TeamPrediction] = field(default_factory=dict)

@@ -2,6 +2,7 @@ from ..enums.live_timing_event import LiveTimingEvent
 from ..interfaces import EventParser
 from ..models import TimingStats, DriverStats, Stat
 
+
 class TimingStatsParser(EventParser):
     def supports(self, event_type: str) -> bool:
         return event_type == LiveTimingEvent.TIMING_STATS.value

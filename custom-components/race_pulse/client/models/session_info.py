@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional, Tuple
 
+
 @dataclass(frozen=True)
 class CircuitDetail:
     """
@@ -11,6 +12,7 @@ class CircuitDetail:
         circuit_id: Unique circuit identifier.
         short_name: Short circuit name.
     """
+
     circuit_id: Optional[int] = None
     short_name: Optional[str] = None
 
@@ -24,6 +26,7 @@ class MeetingDetail:
         name: Meeting name (e.g., "Australian Grand Prix").
         circuit: Circuit details for this meeting.
     """
+
     name: Optional[str] = None
     circuit: Optional[CircuitDetail] = None
 
@@ -46,6 +49,7 @@ class SessionInfo:
         circuit_corners: Circuit corners with car number and coordinates.
         circuit_rotation: Rotation angle to align with F1 visualization.
     """
+
     session_id: Optional[int] = None
     session_type: Optional[str] = None
     name: Optional[str] = None

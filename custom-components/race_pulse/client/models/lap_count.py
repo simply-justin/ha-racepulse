@@ -11,6 +11,7 @@ class LapCount:
         current_lap: Current lap number in the session.
         total_laps: Total scheduled laps for the session.
     """
+
     current_lap: int = 0
     total_laps: int = 0
 

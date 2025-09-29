@@ -15,7 +15,15 @@ HUB_DATA = '[{"name":"Streaming"}]'
 SUBSCRIBE_MSG = {
     "H": "Streaming",
     "M": "Subscribe",
-    "A": [["RaceControlMessages", "TrackStatus", "SessionStatus", "WeatherData", "LapCount"]],
+    "A": [
+        [
+            "RaceControlMessages",
+            "TrackStatus",
+            "SessionStatus",
+            "WeatherData",
+            "LapCount",
+        ]
+    ],
     "I": 1,
 }
 
@@ -81,14 +89,19 @@ class F1SignalRClient(Notifiable):
         while True:
             try:
                 _LOGGER.debug("Negotiating connection at %s", self.NEGOTIATION_URL)
-                async with self._session.get(self.NEGOTIATION_URL, params={"clientProtocol": "1.5", "connectionData": HUB_DATA}) as response:
+                async with self._session.get(
+                    self.NEGOTIATION_URL,
+                    params={"clientProtocol": "1.5", "connectionData": HUB_DATA},
+                ) as response:
                     response.raise_for_status()
                     data = await response.json()
                     token = data.get("ConnectionToken")
                     cookie = response.headers.get("Set-Cookie")
 
                 if not token:
-                    raise RuntimeError("Negotiation failed: no ConnectionToken received")
+                    raise RuntimeError(
+                        "Negotiation failed: no ConnectionToken received"
+                    )
 
                 headers = {"User-Agent": "BestHTTP", "Accept-Encoding": "gzip,identity"}
                 if cookie:
@@ -101,19 +114,23 @@ class F1SignalRClient(Notifiable):
                     "connectionData": HUB_DATA,
                 }
 
-                self._ws = await self._session.ws_connect(self.CONNECTION_URL, params=params, headers=headers)
+                self._ws = await self._session.ws_connect(
+                    self.CONNECTION_URL, params=params, headers=headers
+                )
                 await self._ws.send_json(SUBSCRIBE_MSG)
 
                 # background tasks
                 self._tasks = [
                     asyncio.create_task(self._heartbeat()),
-                    asyncio.create_task(self._listen())
+                    asyncio.create_task(self._listen()),
                 ]
                 _LOGGER.info("SignalR connection established")
                 return
 
             except Exception as err:
-                _LOGGER.warning("SignalR connection failed (%s). Retrying in %s sec …", err, delay)
+                _LOGGER.warning(
+                    "SignalR connection failed (%s). Retrying in %s sec …", err, delay
+                )
                 await asyncio.sleep(delay)
                 delay = min(delay * self.BACKOFF, self.MAX_RETRY_SEC) + random.random()
 

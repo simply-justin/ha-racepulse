@@ -1,8 +1,9 @@
 from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventMapper
+from ..interfaces import EventParser
 from ..models import Weather
 
-class WeatherParser(EventMapper):
+
+class WeatherParser(EventParser):
     def supports(self, event_type: str) -> bool:
         return event_type == LiveTimingEvent.WEATHER.value
 

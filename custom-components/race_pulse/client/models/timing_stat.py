@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 from typing import Dict, Optional
-from ..enums.live_timing_event import LiveTimingEvent
 
 
 @dataclass(frozen=True)
@@ -12,6 +11,7 @@ class Stat:
         value: Recorded value (e.g., speed in km/h) as a string.
         position: Ranking position of the driver for this stat.
     """
+
     value: Optional[str] = None
     position: Optional[int] = None
 
@@ -25,6 +25,7 @@ class DriverStats:
         best_speeds: Dictionary of stat categories to their values.
                      Example keys: "speed_trap", "sector1", "sector2", "sector3".
     """
+
     best_speeds: Dict[str, Stat] = field(default_factory=dict)
 
 
@@ -36,4 +37,5 @@ class TimingStats:
     Attributes:
         drivers: Mapping of driver IDs to their statistics.
     """
+
     drivers: Dict[str, DriverStats] = field(default_factory=dict)

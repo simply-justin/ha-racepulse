@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 
+
 @dataclass(frozen=True)
 class RaceControlMessage:
     """
@@ -11,6 +12,7 @@ class RaceControlMessage:
         timestamp_utc: UTC timestamp when the message was issued.
         text: Human-readable message (e.g., "GREEN LIGHT - PIT EXIT OPEN").
     """
+
     timestamp_utc: datetime
     text: str
 
@@ -23,4 +25,5 @@ class RaceControlMessages:
     Attributes:
         messages: List of race control messages in chronological order.
     """
+
     messages: List[RaceControlMessage] = field(default_factory=list)

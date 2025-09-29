@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Dict, Optional
 from ..enums.live_timing_event import LiveTimingEvent
 
+
 @dataclass(frozen=True)
 class PitStopEntry:
     """
@@ -14,6 +15,7 @@ class PitStopEntry:
         pit_lane_time: Total time spent in the pit lane (string).
         lap: Lap number when the pit stop occurred.
     """
+
     racing_number: Optional[str] = None
     pit_stop_time: Optional[str] = None
     pit_lane_time: Optional[str] = None
@@ -29,6 +31,7 @@ class PitStopTime:
         timestamp_utc: UTC time when the pit stop occurred.
         pit_stop: Pit stop entry details.
     """
+
     timestamp_utc: Optional[datetime] = None
     pit_stop: Optional[PitStopEntry] = None
 
@@ -41,4 +44,5 @@ class PitStopSeries:
     Attributes:
         pit_times: Nested mapping of driver -> lap -> pit stop time.
     """
+
     pit_times: Dict[str, Dict[str, PitStopTime]] = field(default_factory=dict)

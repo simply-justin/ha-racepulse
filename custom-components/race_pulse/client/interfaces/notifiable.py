@@ -1,6 +1,9 @@
 from abc import abstractmethod
-from typing import Any
-from .observable import Observer
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .observable import Observable
+
 
 class Notifiable:
     """
@@ -8,12 +11,12 @@ class Notifiable:
     """
 
     @abstractmethod
-    def attach(self, observer: Observer) -> None:
+    def attach(self, observer: "Observable") -> None:
         """Register an observer to receive updates."""
         pass
 
     @abstractmethod
-    def detach(self, observer: Observer) -> None:
+    def detach(self, observer: "Observable") -> None:
         """Unregister an observer so it no longer receives updates."""
         pass
 

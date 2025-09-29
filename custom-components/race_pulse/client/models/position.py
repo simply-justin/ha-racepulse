@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, Optional, List
 
+
 @dataclass(frozen=True)
 class CarPosition:
     """
@@ -35,11 +36,12 @@ class PositionSnapshot:
 
 
 @dataclass(frozen=True)
-class PositionData:
+class Position:
     """
     A batch of position snapshots.
 
     Attributes:
         snapshots: List of position snapshots.
     """
+
     snapshots: List[PositionSnapshot] = field(default_factory=list)

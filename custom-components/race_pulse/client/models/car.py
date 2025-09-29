@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, Optional, List
 
+
 @dataclass(frozen=True)
 class CarTelemetry:
     """
@@ -23,6 +24,7 @@ class CarTelemetry:
     brake_percent: Optional[int] = None
     drs_state: Optional[int] = None
 
+
 @dataclass(frozen=True)
 class CarTelemetrySnapshot:
     """
@@ -36,6 +38,7 @@ class CarTelemetrySnapshot:
     timestamp_utc: datetime
     cars: Dict[str, CarTelemetry] = field(default_factory=dict)
 
+
 @dataclass(frozen=True)
 class Car:
     """
@@ -44,4 +47,5 @@ class Car:
     Attributes:
         snapshots: List of telemetry snapshots.
     """
+
     snapshots: List[CarTelemetrySnapshot] = field(default_factory=list)

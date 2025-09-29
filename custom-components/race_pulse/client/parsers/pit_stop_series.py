@@ -3,6 +3,7 @@ from ..enums.live_timing_event import LiveTimingEvent
 from ..interfaces import EventParser
 from ..models import PitStopSeries, PitStopTime, PitStopEntry
 
+
 class PitStopSeriesParser(EventParser):
     def supports(self, event_type: str) -> bool:
         return event_type == LiveTimingEvent.PIT_STOP_SERIES.value

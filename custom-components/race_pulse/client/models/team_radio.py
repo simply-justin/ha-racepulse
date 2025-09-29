@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional, List
 
+
 @dataclass(frozen=True)
 class TeamRadioCapture:
     """
@@ -14,6 +15,7 @@ class TeamRadioCapture:
         download_path: Local path where the file is stored (if downloaded).
         transcription: Transcribed text of the radio message (if available).
     """
+
     timestamp_utc: datetime
     racing_number: str
     file_path: Optional[str] = None
@@ -29,4 +31,5 @@ class TeamRadio:
     Attributes:
         captures: List of captured radio messages.
     """
+
     captures: List[TeamRadioCapture] = field(default_factory=list)

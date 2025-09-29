@@ -1,11 +1,46 @@
 from typing import Any
 from .interfaces import EventParser
 from .models import RawTimingEvent
-from .parsers import WeatherParser
+from .parsers import (
+    CarParser,
+    ChampionshipPredictionParser,
+    DriverListParser,
+    ExtrapolatedClockParser,
+    HeartbeatParser,
+    LapCountParser,
+    PitLaneTimeCollectionParser,
+    PitStopSeriesParser,
+    PositionParser,
+    RaceControlMessagesParser,
+    SessionInfoParser,
+    TeamRadioParser,
+    TimingAppParser,
+    TimingStatsParser,
+    TimingParser,
+    TrackStatusParser,
+    WeatherParser,
+)
 
 PARSERS: list[EventParser] = [
+    CarParser(),
+    ChampionshipPredictionParser(),
+    DriverListParser(),
+    ExtrapolatedClockParser(),
+    HeartbeatParser(),
+    LapCountParser(),
+    PitLaneTimeCollectionParser(),
+    PitStopSeriesParser(),
+    PositionParser(),
+    RaceControlMessagesParser(),
+    SessionInfoParser(),
+    TeamRadioParser(),
+    TimingAppParser(),
+    TimingStatsParser(),
+    TimingParser(),
+    TrackStatusParser(),
     WeatherParser(),
 ]
+
 
 class EventFactory:
     """Factory to convert raw events into typed dataclasses."""

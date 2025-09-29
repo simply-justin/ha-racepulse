@@ -4,6 +4,7 @@ from typing import Protocol, Any, TYPE_CHECKING
 if TYPE_CHECKING:
     from .notifiable import Notifiable
 
+
 class Observable(Protocol):
     """
     Observer interface for receiving updates from subjects.
