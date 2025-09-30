@@ -1,11 +1,19 @@
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import Position
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.position import PositionData, CarPosition
+from ..enums import LiveTimingEvent
 
+
+@register_parser(LiveTimingEvent.POSITION.value)
 class PositionParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.POSITION.value
+    """Parse 'Position' into PositionData dataclass."""
 
-    def map(self, raw: dict) -> Position:
-        p = raw["Json"]
-        return Position(
+    def parse(self, raw: Dict[str, Any]) -> PositionData:
+        p = raw.get("Json", {})
+        cars = {
+            num: CarPosition(x=float(d.get("X", 0.0)), y=float(d.get("Y", 0.0)), z=float(d.get("Z", 0.0)))
+            for num, d in p.get("Entries", {}).items()
+        }
+        return PositionData(cars=cars)
+
+    s

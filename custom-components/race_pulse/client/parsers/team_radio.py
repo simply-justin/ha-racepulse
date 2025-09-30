@@ -1,23 +1,24 @@
 from datetime import datetime
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import TeamRadio, TeamRadioCapture
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.team_radio import TeamRadio, TeamRadioCapture
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.TEAM_RADIO.value)
 class TeamRadioParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.TEAM_RADIO.value
+    """Parse 'TeamRadio' into TeamRadio with a list of captures."""
 
-    def parse(self, raw: dict) -> TeamRadio:
-        captures = []
-        for c in raw["Json"].get("Captures", []):
-            captures.append(
-                TeamRadioCapture(
-                    timestamp_utc=datetime.fromisoformat(c["Utc"]),
-                    racing_number=c.get("RacingNumber"),
-                    file_path=c.get("Path"),
-                    download_path=c.get("DownloadFilePath"),
-                    transcription=c.get("Transcription"),
-                )
+    def parse(self, raw: Dict[str, Any]) -> TeamRadio:
+        p = raw.get("Json", {})
+        captures = [
+            TeamRadioCapture(
+                timestamp_utc=datetime.fromisoformat(c["Utc"]),
+                racing_number=c.get("RacingNumber"),
+                file_path=c.get("Path"),
+                download_path=c.get("DownloadFilePath"),
+                transcription=c.get("Transcription"),
             )
+            for c in p.get("Captures", [])
+        ]
         return TeamRadio(captures=captures)

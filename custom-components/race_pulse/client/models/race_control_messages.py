@@ -27,3 +27,4 @@ class RaceControlMessages:
     """
 
     messages: List[RaceControlMessage] = field(default_factory=list)
+/// Sample: {"Messages": {"2": {"Utc": "2021-03-27T12:00:00", "Category": "Flag", "Flag": "GREEN", "Scope": "Track", "Message": "GREEN LIGHT - PIT EXIT OPEN"}}}

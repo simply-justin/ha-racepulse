@@ -1,14 +1,14 @@
 from datetime import datetime
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import Heartbeat
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.heartbeat import Heartbeat
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.HEARTBEAT.value)
 class HeartbeatParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.HEARTBEAT.value
+    """Parse 'Heartbeat' event into Heartbeat dataclass."""
 
-    def parse(self, raw: dict) -> Heartbeat:
-        return Heartbeat(
-            timestamp_utc=datetime.fromisoformat(raw["DateTime"].replace("Z", "+00:00"))
-        )
+    def parse(self, raw: Dict[str, Any]) -> Heartbeat:
+        ts = datetime.fromisoformat(raw["DateTime"].replace("Z", "+00:00"))
+        return Heartbeat(timestamp_utc=ts)

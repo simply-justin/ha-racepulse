@@ -4,38 +4,39 @@ from typing import Dict, Optional
 
 @dataclass(frozen=True)
 class Stat:
-    """
-    A single statistical value.
-
-    Attributes:
-        value: Recorded value (e.g., speed in km/h) as a string.
-        position: Ranking position of the driver for this stat.
-    """
-
-    value: Optional[str] = None
-    position: Optional[int] = None
+    """Best speed/time statistic entry."""
+    value: float
+    position: int
 
 
 @dataclass(frozen=True)
 class DriverStats:
-    """
-    Statistics for a single driver.
-
-    Attributes:
-        best_speeds: Dictionary of stat categories to their values.
-                     Example keys: "speed_trap", "sector1", "sector2", "sector3".
-    """
-
-    best_speeds: Dict[str, Stat] = field(default_factory=dict)
+    """Per-driver statistics (best speeds, sectors)."""
+    best_speeds: Dict[str, Stat]
 
 
 @dataclass(frozen=True)
 class TimingStats:
     """
-    Timing statistics data point for all drivers.
-
-    Attributes:
-        drivers: Mapping of driver IDs to their statistics.
+    Timing statistics for all drivers.
+    Source: SignalR event "TimingStats".
     """
+    drivers: Dict[str, DriverStats]
+public sealed record TimingStatsDataPoint : ILiveTimingDataPoint
+{
+    /// <inheritdoc />
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.TimingStats;
 
-    drivers: Dict[str, DriverStats] = field(default_factory=dict)
+    public Dictionary<string, Driver> Lines { get; set; } = new();
+
+    public sealed record Driver
+    {
+        public Dictionary<string, Stat> BestSpeeds { get; set; } = [];
+
+        public record Stat
+        {
+            public string? Value { get; set; }
+            public int? Position { get; set; }
+        }
+    }
+}

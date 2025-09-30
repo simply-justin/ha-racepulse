@@ -1,14 +1,15 @@
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import LapCount
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.lap_count import LapCount
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.LAP_COUNT.value)
 class LapCountParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.LAP_COUNT.value
+    """Parse 'LapCount' raw payload into LapCount dataclass."""
 
-    def parse(self, raw: dict) -> LapCount:
-        p = raw["Json"]
+    def parse(self, raw: Dict[str, Any]) -> LapCount:
+        p = raw.get("Json", {})
         return LapCount(
             current_lap=int(p.get("CurrentLap", 0)),
             total_laps=int(p.get("TotalLaps", 0)),

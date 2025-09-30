@@ -1,18 +1,23 @@
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import TimingStats, DriverStats, Stat
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.timing_stat import TimingStats, DriverStats, Stat
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.TIMING_STATS.value)
 class TimingStatsParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.TIMING_STATS.value
+    """Parse 'TimingStats' into TimingStats dataclass."""
 
-    def parse(self, raw: dict) -> TimingStats:
+    def parse(self, raw: Dict[str, Any]) -> TimingStats:
+        p = raw.get("Json", {})
         drivers = {}
-        for num, line in raw["Json"].get("Lines", {}).items():
+        for num, line in p.get("Lines", {}).items():
             best_speeds = {
-                key: Stat(value=stat.get("Value"), position=stat.get("Position"))
-                for key, stat in line.get("BestSpeeds", {}).items()
+                k: Stat(
+                    value=float(stat.get("Value", 0.0)),
+                    position=int(stat.get("Position", 0)),
+                )
+                for k, stat in line.get("BestSpeeds", {}).items()
             }
             drivers[num] = DriverStats(best_speeds=best_speeds)
         return TimingStats(drivers=drivers)

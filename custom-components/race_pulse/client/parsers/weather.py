@@ -1,13 +1,17 @@
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import Weather
+from typing import Dict, Any
+from ..enums import LiveTimingEvent
+from ..models.weather import Weather
+from ..interfaces import EventParser, register_parser
 
 
+@register_parser(LiveTimingEvent.WEATHER.value)
 class WeatherParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.WEATHER.value
+    """
+    Parse 'WeatherData' raw payload into a Weather dataclass.
+    Keeps dataclass pure (no JSON knowledge); conversion lives here.
+    """
 
-    def map(self, raw: dict) -> Weather:
+    def parse(self, raw: Dict[str, Any]) -> Weather:
         p = raw["Json"]
         return Weather(
             air_temperature=float(p.get("AirTemp", 0.0)),

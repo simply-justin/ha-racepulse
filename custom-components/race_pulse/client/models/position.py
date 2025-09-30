@@ -1,6 +1,6 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
-from typing import Dict, Optional, List
+from typing import Dict, List
 
 
 @dataclass(frozen=True)
@@ -10,15 +10,15 @@ class CarPosition:
 
     Attributes:
         status: Driver status ("on_track" or "off_track").
-        x_cm: X coordinate of car in centimeters.
-        y_cm: Y coordinate of car in centimeters.
-        z_cm: Z coordinate of car in centimeters.
+        x: X coordinate of car in centimeters.
+        y: Y coordinate of car in centimeters.
+        z: Z coordinate of car in centimeters.
     """
 
-    status: Optional[str] = None  # e.g., "on_track", "off_track"
-    x_cm: Optional[int] = None
-    y_cm: Optional[int] = None
-    z_cm: Optional[int] = None
+    status: str  # e.g., "on_track", "off_track"
+    x: int
+    y: int
+    z: int
 
 
 @dataclass(frozen=True)
@@ -32,7 +32,7 @@ class PositionSnapshot:
     """
 
     timestamp_utc: datetime
-    cars: Dict[str, CarPosition] = field(default_factory=dict)
+    cars: Dict[str, CarPosition]
 
 
 @dataclass(frozen=True)
@@ -44,4 +44,50 @@ class Position:
         snapshots: List of position snapshots.
     """
 
-    snapshots: List[PositionSnapshot] = field(default_factory=list)
+    snapshots: List[PositionSnapshot]
+/// <summary>
+/// Position data is sent as compressed (with deflate) JSON containing Entries.
+/// Each Position Entry is the cars position at a specific point of time, and they seem to be batched to reduce network load.
+/// </summary>
+public sealed class PositionDataPoint : ILiveTimingDataPoint
+{
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.Position;
+
+    public List<PositionData> Position { get; set; } = [new()];
+
+    public sealed class PositionData
+    {
+        public DateTimeOffset Timestamp { get; set; }
+
+        /// <summary>
+        /// Dictionary of DriverNumber to Entry with position data.
+        /// </summary>
+        public Dictionary<string, Entry> Entries { get; set; } = [];
+
+        public sealed class Entry
+        {
+            public DriverStatus? Status { get; set; }
+
+            /// <summary>
+            /// X position of the car in 1/10ths of a meter (cm).
+            /// </summary>
+            public int? X { get; set; }
+
+            /// <summary>
+            /// Y position of the car in 1/10ths of a meter (cm).
+            /// </summary>
+            public int? Y { get; set; }
+
+            /// <summary>
+            /// Z position of the car in 1/10ths of a meter (cm).
+            /// </summary>
+            public int? Z { get; set; }
+
+            public enum DriverStatus
+            {
+                OnTrack,
+                OffTrack,
+            }
+        }
+    }
+}

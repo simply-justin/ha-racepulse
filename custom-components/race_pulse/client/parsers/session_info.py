@@ -1,30 +1,32 @@
 from datetime import datetime
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import SessionInfo, CircuitDetail, MeetingDetail
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.session_info import SessionInfo, MeetingDetail, CircuitDetail
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.SESSION_INFO.value)
 class SessionInfoParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.SESSION_INFO.value
+    """Parse 'SessionInfo' into SessionInfo dataclass."""
 
-    def parse(self, raw: dict) -> SessionInfo:
-        p = raw["Json"]
-
-        circuit = None
-        if "Circuit" in p:
-            circuit = CircuitDetail(
-                circuit_id=p["Circuit"].get("Key"),
-                short_name=p["Circuit"].get("ShortName"),
+    def parse(self, raw: Dict[str, Any]) -> SessionInfo:
+        p = raw.get("Json", {})
+        circuit = (
+            CircuitDetail(
+                circuit_id=p.get("Circuit", {}).get("Key"),
+                short_name=p.get("Circuit", {}).get("ShortName"),
             )
-
-        meeting = None
-        if "Meeting" in p:
-            meeting = MeetingDetail(
-                name=p["Meeting"].get("Name"),
+            if "Circuit" in p
+            else None
+        )
+        meeting = (
+            MeetingDetail(
+                name=p.get("Meeting", {}).get("Name"),
                 circuit=circuit,
             )
-
+            if "Meeting" in p
+            else None
+        )
         return SessionInfo(
             session_id=p.get("Key"),
             session_type=p.get("Type"),

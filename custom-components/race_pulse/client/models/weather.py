@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from ..enums import LiveTimingEvent
 
 
 @dataclass(frozen=True)
@@ -6,14 +7,21 @@ class Weather:
     """
     Current weather and track conditions.
 
+    Source: SignalR event "WeatherData"
+    Raw example:
+        {
+          "AirTemp": "25.6", "Humidity": "62.0", "Pressure": "1013.1",
+          "Rainfall": "0", "TrackTemp": "31.2", "WindDirection": "7", "WindSpeed": "1.2"
+        }
+
     Attributes:
-        air_temperature: Ambient air temperature in °C.
+        air_temperature: Ambient air temperature (°C).
         humidity_percent: Relative humidity (%).
-        air_pressure_hpa: Atmospheric pressure in hPa.
-        rainfall_mm: Rainfall intensity in millimeters.
-        track_temperature: Track surface temperature in °C.
-        wind_direction_deg: Wind direction in degrees (0–360).
-        wind_speed_kph: Wind speed in kilometers per hour.
+        air_pressure_hpa: Air pressure (hPa).
+        rainfall_mm: Rainfall in millimeters (mm/h if rate; F1 docs vary).
+        track_temperature: Track surface temperature (°C).
+        wind_direction_deg: Wind direction (0–360 degrees).
+        wind_speed_kph: Wind speed (km/h).
     """
 
     air_temperature: float
@@ -24,6 +32,20 @@ class Weather:
     wind_direction_deg: float
     wind_speed_kph: float
 
-    def is_raining(self) -> bool:
-        """Return True if rainfall is greater than zero."""
-        return self.rainfall_mm > 0
+    data_type: LiveTimingEvent = LiveTimingEvent.WEATHER
+/// <summary>
+/// Sample: { "AirTemp": "25.6", "Humidity": "62.0", "Pressure": "1013.1", "Rainfall": "0", "TrackTemp": "31.2", "WindDirection": "7", "WindSpeed": "1.2" }
+/// </summary>
+public sealed record WeatherDataPoint : ILiveTimingDataPoint
+{
+    /// <inheritdoc />
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.WeatherData;
+
+    public string? AirTemp { get; set; }
+    public string? Humidity { get; set; }
+    public string? Pressure { get; set; }
+    public string? Rainfall { get; set; }
+    public string? TrackTemp { get; set; }
+    public string? WindDirection { get; set; }
+    public string? WindSpeed { get; set; }
+}

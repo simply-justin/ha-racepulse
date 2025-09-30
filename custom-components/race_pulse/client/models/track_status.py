@@ -14,3 +14,14 @@ class TrackStatus:
 
     status_flag: str = "unknown"
     message: Optional[str] = None
+/// <summary>
+/// Sample: {"Status": "2", "Message": "Yellow", "_kf": true}
+/// </summary>
+public sealed record TrackStatusDataPoint : ILiveTimingDataPoint
+{
+    /// <inheritdoc />
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.TrackStatus;
+
+    public string? Status { get; set; }
+    public string? Message { get; set; }
+}

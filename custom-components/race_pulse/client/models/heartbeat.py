@@ -11,4 +11,11 @@ class Heartbeat:
         timestamp_utc: UTC time when the heartbeat was emitted.
     """
 
-    timestamp_utc: datetime = datetime.utcnow()
+    timestamp_utc: datetime
+public sealed record HeartbeatDataPoint : ILiveTimingDataPoint
+{
+    /// <inheritdoc />
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.Heartbeat;
+
+    public DateTimeOffset Utc { get; init; }
+}

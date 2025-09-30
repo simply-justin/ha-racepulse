@@ -1,14 +1,15 @@
 from datetime import datetime
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import PitStopSeries, PitStopTime, PitStopEntry
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.pit_stop_series import PitStopSeries, PitStopTime, PitStopEntry
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.PIT_STOP_SERIES.value)
 class PitStopSeriesParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.PIT_STOP_SERIES.value
+    """Parse 'PitStopSeries' into PitStopSeries dataclass."""
 
-    def parse(self, raw: dict) -> PitStopSeries:
+    def parse(self, raw: Dict[str, Any]) -> PitStopSeries:
         pit_times = {}
         for driver, laps in raw["Json"].get("PitTimes", {}).items():
             driver_pits = {}
@@ -23,5 +24,5 @@ class PitStopSeriesParser(EventParser):
                     ),
                 )
             pit_times[driver] = driver_pits
-
         return PitStopSeries(pit_times=pit_times)
+aa

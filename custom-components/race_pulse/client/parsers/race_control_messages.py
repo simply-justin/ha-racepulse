@@ -1,20 +1,22 @@
 from datetime import datetime
-from ..enums.live_timing_event import LiveTimingEvent
-from ..interfaces import EventParser
-from ..models import RaceControlMessages, RaceControlMessage
+from typing import Dict, Any
+from ..interfaces import EventParser, register_parser
+from ..models.race_control_messages import RaceControlMessages, RaceControlMessage
+from ..enums import LiveTimingEvent
 
 
+@register_parser(LiveTimingEvent.RACE_CONTROL_MESSAGES.value)
 class RaceControlMessagesParser(EventParser):
-    def supports(self, event_type: str) -> bool:
-        return event_type == LiveTimingEvent.RACE_CONTROL_MESSAGES.value
+    """Parse 'RaceControlMessages' into RaceControlMessages dataclass."""
 
-    def parse(self, raw: dict) -> RaceControlMessages:
-        messages = []
-        for _, msg in raw["Json"].get("Messages", {}).items():
-            messages.append(
-                RaceControlMessage(
-                    timestamp_utc=datetime.fromisoformat(msg["Utc"]),
-                    text=msg["Message"],
-                )
+    def parse(self, raw: Dict[str, Any]) -> RaceControlMessages:
+        p = raw.get("Json", {})
+        messages = [
+            RaceControlMessage(
+                timestamp_utc=datetime.fromisoformat(m["Utc"]),
+                text=m["Message"],
             )
+            for m in p.get("Messages", [])
+        ]
         return RaceControlMessages(messages=messages)
+aa

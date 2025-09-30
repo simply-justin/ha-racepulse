@@ -1,56 +1,78 @@
-from dataclasses import dataclass, field
-from typing import Dict, Optional
+from dataclasses import dataclass
+from typing import Dict
 
 
 @dataclass(frozen=True)
 class DriverPrediction:
-    """
-    Championship prediction for a single driver.
-
-    Attributes:
-        racing_number: Driver’s racing number.
-        current_position: Current championship position.
-        predicted_position: Predicted final position.
-        current_points: Current championship points.
-        predicted_points: Predicted championship points.
-    """
-
-    racing_number: Optional[str] = None
-    current_position: Optional[int] = None
-    predicted_position: Optional[int] = None
-    current_points: Optional[float] = None
-    predicted_points: Optional[float] = None
+    """Prediction data for a single driver in championship standings."""
+    racing_number: str
+    current_position: int
+    predicted_position: int
+    current_points: float
+    predicted_points: float
 
 
 @dataclass(frozen=True)
 class TeamPrediction:
-    """
-    Championship prediction for a team.
-
-    Attributes:
-        team_name: Team name.
-        current_position: Current championship position.
-        predicted_position: Predicted final position.
-        current_points: Current championship points.
-        predicted_points: Predicted championship points.
-    """
-
-    team_name: Optional[str] = None
-    current_position: Optional[int] = None
-    predicted_position: Optional[int] = None
-    current_points: Optional[float] = None
-    predicted_points: Optional[float] = None
+    """Prediction data for a single team in championship standings."""
+    team_name: str
+    current_position: int
+    predicted_position: int
+    current_points: float
+    predicted_points: float
 
 
 @dataclass(frozen=True)
 class ChampionshipPrediction:
     """
     Championship predictions for drivers and teams.
-
-    Attributes:
-        drivers: Mapping of driver IDs to driver predictions.
-        teams: Mapping of team names to team predictions.
+    Source: SignalR event "ChampionshipPrediction".
     """
+    drivers: Dict[str, DriverPrediction]
+    teams: Dict[str, TeamPrediction]
+/// <summary>
+/// Sample:
+/// <c>
+///    "Drivers": {
+///      "1": {
+///        "RacingNumber": "1",
+///        "CurrentPosition": 1,
+///        "PredictedPosition": 1,
+///        "CurrentPoints": 161.0,
+///        "PredictedPoints": 169.0
+///      },
+///      "16": {
+///        "RacingNumber": "16",
+///        "CurrentPosition": 2,
+///        "PredictedPosition": 2,
+///        "CurrentPoints": 113.0,
+///        "PredictedPoints": 138.0
+///      }
+/// </c>
+/// </summary>
+public sealed class ChampionshipPredictionDataPoint : ILiveTimingDataPoint
+{
+    /// <inheritdoc />
+    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.ChampionshipPrediction;
 
-    drivers: Dict[str, DriverPrediction] = field(default_factory=dict)
-    teams: Dict[str, TeamPrediction] = field(default_factory=dict)
+    public Dictionary<string, Driver> Drivers { get; set; } = new();
+    public Dictionary<string, Team> Teams { get; set; } = new();
+
+    public sealed record Driver
+    {
+        public string? RacingNumber { get; set; }
+        public int? CurrentPosition { get; set; }
+        public int? PredictedPosition { get; set; }
+        public decimal? CurrentPoints { get; set; }
+        public decimal? PredictedPoints { get; set; }
+    }
+
+    public sealed record Team
+    {
+        public string? TeamName { get; set; }
+        public int? CurrentPosition { get; set; }
+        public int? PredictedPosition { get; set; }
+        public decimal? CurrentPoints { get; set; }
+        public decimal? PredictedPoints { get; set; }
+    }
+}
