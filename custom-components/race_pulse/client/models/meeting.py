@@ -1,86 +1,102 @@
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import timedelta
 from typing import List, Optional
 
 
-@dataclass
-class SessionInfo:
+# https://livetiming.formula1.com/static/2025/Index.json
+@dataclass(frozen=True)
+class Session:
     """
-    Information about a single session within a race meeting.
+    Information about a Formula 1 Session.
 
-    Attributes:
-        session_id: Unique identifier for the session.
-        name: Human-readable session name (e.g., "Qualifying").
-        session_type: Session type (e.g., "Practice", "Race").
-        start_time: UTC start datetime.
-        end_time: UTC end datetime.
-        gmt_offset: Time offset from GMT as timedelta.
-        path: Optional internal path identifier.
+    Raw example:
+        {
+            "Key": 9889,
+            "Type": "Practice",
+            "Number": 1,
+            "Name": "Practice 1",
+            "StartDate": "2025-10-03T17:30:00",
+            "EndDate": "2025-10-03T18:30:00",
+            "GmtOffset": "08:00:00",
+            "Path": "2025/2025-10-05_Singapore_Grand_Prix/2025-10-03_Practice_1/",
+        }
     """
 
-    session_id: int
+    key: int
+    type: str
+    number: int
     name: str
-    session_type: str
-    start_time: datetime
-    end_time: datetime
+    start_date: timedelta
+    end_date: timedelta
     gmt_offset: timedelta
-    path: Optional[str] = None
+    path: str
 
 
-@dataclass
+@dataclass(frozen=True)
+class Country:
+    """
+    Information about a Formula 1 Country.
+
+    Raw example:
+        {
+            "Key": 157,
+            "Code": "SGP",
+            "Name": "Singapore"
+        }
+    """
+
+    key: int
+    code: str
+    name: str
+
+
+@dataclass(frozen=True)
+class Circuit:
+    """
+    Information about a Formula 1 Circuit.
+
+    Raw example:
+        {
+            "Key": 61,
+            "ShortName": "Singapore"
+        }
+    """
+
+    key: int
+    short_name: str
+
+
+@dataclass(frozen=True)
 class Meeting:
     """
     Information about a Formula 1 meeting (Grand Prix).
 
-    Attributes:
-        meeting_id: Unique identifier for the meeting.
-        name: Name of the meeting (e.g., "Australian Grand Prix").
-        location: Meeting location (e.g., "Melbourne").
-        sessions: List of sessions associated with the meeting.
-    """
-
-    meeting_id: int
-    name: str
-    location: str
-    sessions: List[SessionInfo] = field(default_factory=list)
-
-
-@dataclass
-class MeetingIndex:
-    """
-    List of meetings for a given year.
-
-    Attributes:
-        year: Championship year.
-        meetings: All Formula 1 meetings for the year.
-    """
-
-    year: int
-    meetings: List[Meeting] = field(default_factory=list)
-/// <summary>
-/// The response model for the F1 Live Timing meetings and sessions index.
-/// </summary>
-public record ListMeetingsApiResponse
-{
-    public required int Year { get; set; }
-    public required List<Meeting> Meetings { get; set; }
-
-    public record Meeting
-    {
-        public required int Key { get; set; }
-        public required string Name { get; set; }
-        public required string Location { get; set; }
-        public required List<Session> Sessions { get; set; }
-
-        public record Session
+    Raw example:
         {
-            public required int Key { get; set; }
-            public required string Name { get; set; }
-            public required string Type { get; set; }
-            public required DateTime StartDate { get; set; }
-            public required DateTime EndDate { get; set; }
-            public required TimeSpan GmtOffset { get; set; }
-            public string? Path { get; set; }
+            "Sessions": [
+                ...
+            ],
+            "Key": 1270,
+            "Code": "F1202518",
+            "Number": 18,
+            "Location": "Marina Bay",
+            "OfficialName": "FORMULA 1 SINGAPORE AIRLINES SINGAPORE GRAND PRIX 2025",
+            "Name": "Singapore Grand Prix",
+            "Country": {
+                ...
+            },
+            "Circuit": {
+                ...
+            }
         }
-    }
-}
+    """
+
+    sessions: List[Session]
+    key: int
+    code: Optional[str]
+    number: Optional[int]
+    location: str
+    official_name: str
+    name: str
+    country: Country
+    circuit: Circuit

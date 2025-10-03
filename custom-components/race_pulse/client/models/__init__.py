@@ -1,54 +1,59 @@
-from .car import Car, CarTelemetry, CarTelemetrySnapshot
-from .championship_prediction import ChampionshipPrediction, DriverPrediction, TeamPrediction
-from .driver_list import DriverList, DriverInfo
+from .driver_list import DriverList, Driver
 from .extrapolated_clock import ExtrapolatedClock
 from .heartbeat import Heartbeat
-from .lap_count import LapCount
-from .pit_lane_time_collection import PitLaneTimeCollection
-from .pit_stop_series import PitStopSeries, PitStopTime, PitStopEntry
-from .position import Position
+from .meeting import Meeting, Country, Circuit, Session
 from .race_control_messages import RaceControlMessages, RaceControlMessage
 from .raw_timing_event import RawTimingEvent
-from .session_info import SessionInfo, CircuitDetail, MeetingDetail
+from .session_info import SessionInfo, ArchiveStatus
 from .team_radio import TeamRadio, TeamRadioCapture
-from .timing_app import TimingApp
-from .timing_stat import TimingStats, DriverStats, Stat
-from .timing import Timing, DriverTiming
+from .timing_app import TimingApp, DriverStints, Stint
+from .timing_data import (
+    TimingData,
+    DriverTiming,
+    LastLapTime,
+    BestLapTime,
+    Speed,
+    SpeedData,
+    Sector,
+    Segment,
+)
+from .timing_stat import TimingStats, DriverStat, BestSpeed, PersonalBestLapTime, Stat
 from .track_status import TrackStatus
-from .weather import Weather
+from .weather_data import WeatherData
 
 __all__ = [
-    "Car",
-    "CarTelemetry",
-    "CarTelemetrySnapshot",
-    "CarTelemetryBatch",
-    "ChampionshipPrediction",
-    "DriverPrediction",
-    "TeamPrediction",
     "DriverList",
-    "DriverInfo",
+    "Driver",
     "ExtrapolatedClock",
     "Heartbeat",
-    "LapCount",
-    "PitLaneTimeCollection",
-    "PitStopSeries",
-    "PitStopTime",
-    "PitStopEntry",
-    "Position",
+    "Meeting",
+    "Country",
+    "Circuit",
+    "Session",
     "RaceControlMessages",
     "RaceControlMessage",
     "RawTimingEvent",
     "SessionInfo",
-    "CircuitDetail",
-    "MeetingDetail",
+    "ArchiveStatus",
     "TeamRadio",
-    "TeamRadioCapture"
+    "TeamRadioCapture",
     "TimingApp",
-    "TimingStats",
-    "DriverStats",
-    "Stat",
-    "Timing",
+    "DriverStints",
+    "Stint",
+    "TimingData",
     "DriverTiming",
+    "LastLapTime",
+    "BestLapTime",
+    "Speed",
+    "SpeedData",
+    "Sector",
+    "Segment",
+    "DriverTiming",
+    "TimingStats",
+    "DriverStat",
+    "BestSpeed",
+    "PersonalBestLapTime",
+    "Stat",
     "TrackStatus",
-    "Weather",
+    "WeatherData",
 ]

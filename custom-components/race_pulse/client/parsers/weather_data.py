@@ -5,7 +5,7 @@ from ..interfaces import EventParser, register_parser
 
 
 @register_parser(LiveTimingEvent.WEATHER.value)
-class WeatherParser(EventParser):
+class WeatherDataParser(EventParser):
     """
     Parse 'WeatherData' raw payload into a Weather dataclass.
     Keeps dataclass pure (no JSON knowledge); conversion lives here.

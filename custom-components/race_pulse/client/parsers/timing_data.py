@@ -5,7 +5,7 @@ from ..enums import LiveTimingEvent
 
 
 @register_parser(LiveTimingEvent.TIMING.value)
-class TimingParser(EventParser):
+class TimingDataParser(EventParser):
     """Parse 'TimingData' into Timing with per-driver timing info."""
 
     def parse(self, raw: Dict[str, Any]) -> Timing:

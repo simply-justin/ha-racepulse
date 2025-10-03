@@ -14,3 +14,9 @@ class TrackStatusParser(EventParser):
             status_flag=p.get("Status", "unknown"),
             message=p.get("Message"),
         )
+
+        # "TrackStatus": {
+        #     "Status": "1",
+        #     "Message": "AllClear",
+        #     "_kf": true
+        # },

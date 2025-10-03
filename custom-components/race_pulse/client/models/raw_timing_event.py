@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any
+from ..enums import LiveTimingEvent
 
 
 @dataclass
@@ -14,6 +15,6 @@ class RawTimingEvent:
         timestamp_utc: UTC timestamp when the event was emitted.
     """
 
-    event_type: str
+    event_type: LiveTimingEvent
     payload: Any
-    timestamp_utc: datetime
+    datetime_utc: datetime

@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from datetime import timedelta
+from ..enums import LiveTimingEvent
 
 
 @dataclass(frozen=True)
@@ -7,30 +8,17 @@ class ExtrapolatedClock:
     """
     Extrapolated session clock.
 
-    Source: SignalR event "ExtrapolatedClock".
+    Source: SignalR event "ExtrapolatedClock"
     Raw example:
         {
-          "Elapsed": "1234.56",
-          "Remaining": "245.00",
-          "Extrapolating": true
+            "Utc": "2025-10-03T15:37:14.4783763Z",
+            "Remaining": "00:00:00",
+            "Extrapolating": false,
+            "_kf": true
         }
-
-    Attributes:
-        elapsed_time: Elapsed session time as timedelta.
-        remaining_time: Remaining session time as timedelta.
-        is_extrapolating: Whether the system is extrapolating session end.
     """
-    elapsed_time: timedelta # Validate if this is current or elapsed
+
+    data_type: LiveTimingEvent = LiveTimingEvent.EXTRAPOLATED_CLOCK
+    datetime_utc: timedelta
     remaining_time: timedelta
-    is_extrapolating: bool
-public sealed record ExtrapolatedClockDataPoint : ILiveTimingDataPoint
-{
-    /// <inheritdoc />
-    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.ExtrapolatedClock;
-
-    public DateTimeOffset Utc { get; init; }
-
-    public string Remaining { get; init; } = "99:00:00";
-
-    public bool Extrapolating { get; init; }
-}
+    extrapolating: bool

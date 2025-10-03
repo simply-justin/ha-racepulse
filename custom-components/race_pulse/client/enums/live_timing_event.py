@@ -8,7 +8,7 @@ from ..models import (
     ExtrapolatedClock,
     Heartbeat,
     LapCount,
-    PositionData,
+    Position,
     RaceControlMessages,
     SessionInfo,
     TeamRadio,
@@ -36,13 +36,13 @@ class LiveTimingEvent(Enum):
     LAP_COUNT = ("LapCount", LapCount)
     PIT_LANE_TIME_COLLECTION = ("PitLaneTimeCollection", PitLaneTimeCollection)
     PIT_STOP_SERIES = ("PitStopSeries", PitStopSeries)
-    POSITION = ("Position", PositionData)
+    POSITION = ("Position", Position)
     RACE_CONTROL_MESSAGES = ("RaceControlMessages", RaceControlMessages)
     SESSION_INFO = ("SessionInfo", SessionInfo)
     TEAM_RADIO = ("TeamRadio", TeamRadio)
     TIMING_APP = ("TimingAppData", TimingApp)
     TIMING_STATS = ("TimingStats", TimingStats)
-    TIMING = ("TimingData", Timing)
+    TIMING_DATA = ("TimingData", Timing)
     TRACK_STATUS = ("TrackStatus", TrackStatus)
     WEATHER = ("WeatherData", Weather)
 

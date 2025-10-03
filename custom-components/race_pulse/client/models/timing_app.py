@@ -1,27 +1,34 @@
-from dataclasses import dataclass, field
-from typing import Dict, Optional
+from dataclasses import dataclass
+from typing import Dict
+from ..enums import LiveTimingEvent
 
 
 @dataclass(frozen=True)
 class Stint:
     """
-    Represents a tyre stint for a driver.
+    Represents a stint.
 
-    Attributes:
-        lap_flags: Flags for special lap conditions (e.g., pit, SC).
-        compound: Tyre compound used (e.g., "SOFT", "MEDIUM", "HARD").
-        is_new: Whether the tyres were new at the start of the stint.
-        total_laps: Total laps completed on this stint.
-        start_laps: Starting lap number for this stint.
-        lap_time: Best lap time achieved in this stint (string).
+    Raw example:
+        {
+            "LapFlags": 0,
+            "Compound": "MEDIUM",
+            "New": "true",
+            "TyresNotChanged": "0",
+            "TotalLaps": 8,
+            "StartLaps": 0,
+            "LapTime": "1:32.345",
+            "LapNumber": 6
+        },
     """
 
-    lap_flags: Optional[int] = None
-    compound: Optional[str] = None
-    is_new: Optional[bool] = None
-    total_laps: Optional[int] = None
-    start_laps: Optional[int] = None
-    lap_time: Optional[str] = None
+    lap_flags: int
+    compound: int
+    new: bool
+    tyres_not_changed: int
+    total_laps: int
+    start_laps: int
+    lap_time: str
+    lap_number: int
 
 
 @dataclass(frozen=True)
@@ -29,15 +36,19 @@ class DriverStints:
     """
     Tyre stint and strategy data for a driver.
 
-    Attributes:
-        grid_position: Starting grid position (only in race sessions).
-        line_position: Timing line reference.
-        stints: Dictionary of stint identifiers to stint details.
+    Raw example:
+        {
+            "RacingNumber": "1",
+            "Line": 3,
+            "Stints": [
+                ...
+            ]
+        }
     """
 
-    grid_position: Optional[str] = None
-    line_position: Optional[int] = None
-    stints: Dict[str, Stint] = field(default_factory=dict)
+    racing_number: int
+    line: int
+    stints: Dict[str, Stint]
 
 
 @dataclass(frozen=True)
@@ -45,57 +56,15 @@ class TimingApp:
     """
     Strategy and tyre data for all drivers.
 
-    Attributes:
-        drivers: Mapping of driver IDs to their stint data.
+    Source: SignalR event "TimingApp"
+    Raw example:
+        {
+            "Lines": {
+                ...
+            },
+            "_kf": true
+        }
     """
 
-    drivers: Dict[str, DriverStints] = field(default_factory=dict)
-/// <summary>
-/// Sample:
-/// "Lines": {
-///   "1": {
-///     "RacingNumber": "1",
-///     "Line": 1,
-///     "Stints": [
-///       {
-///         "LapFlags": 0,
-///         "Compound": "SOFT",
-///         "New": "true",
-///         "TyresNotChanged": "0",
-///         "TotalLaps": 3,
-///         "StartLaps": 0,
-///         "LapTime": "1:28.491",
-///         "LapNumber": 3
-///       }
-///   }
-/// }
-/// </summary>
-public sealed record TimingAppDataPoint : ILiveTimingDataPoint
-{
-    /// <inheritdoc />
-    public LiveTimingDataType LiveTimingDataType => LiveTimingDataType.TimingAppData;
-
-    public Dictionary<string, Driver> Lines { get; set; } = new();
-
-    public sealed record Driver
-    {
-        /// <summary>
-        /// The position the driver started the race from. Only available in Race sessions.
-        /// </summary>
-        public string? GridPos { get; set; }
-
-        public int? Line { get; set; }
-
-        public Dictionary<string, Stint> Stints { get; set; } = new();
-
-        public sealed record Stint
-        {
-            public int? LapFlags { get; set; }
-            public string? Compound { get; set; }
-            public bool? New { get; set; }
-            public int? TotalLaps { get; set; }
-            public int? StartLaps { get; set; }
-            public string? LapTime { get; set; }
-        }
-    }
-}
+    data_type: LiveTimingEvent = LiveTimingEvent.TIMING_APP
+    lines: Dict[str, DriverStints]

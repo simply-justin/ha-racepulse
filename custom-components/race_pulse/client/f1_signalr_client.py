@@ -14,11 +14,23 @@ SUBSCRIBE_MSG = {
     "M": "Subscribe",
     "A": [
         [
+            "CarData", # Paid
+            "ChampionshipPrediction", # Paid
+            "DriverList",
+            "ExtrapolatedClock",
+            "Heartbeat",
+            "LapCount", # Paid
+            "PitLaneTimeCollection",
+            "PitStopSeries", # Paid
+            "Position", # Paid
             "RaceControlMessages",
+            "SessionInfo",
+            "TeamRadio",
+            "TimingAppData",
+            "TimingStats",
+            "TimingData",
             "TrackStatus",
-            "SessionStatus",
             "WeatherData",
-            "LapCount",
         ]
     ],
     "I": 1,
