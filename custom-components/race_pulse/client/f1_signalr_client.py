@@ -2,8 +2,9 @@ import asyncio
 import logging
 from typing import Any, Dict
 from aiohttp import ClientSession, WSMsgType, ClientWebSocketResponse
-from .interfaces import Notifiable, Observable
+from .interfaces import Event, Notifiable, Observable
 from .event_factory import EventFactory
+from .decorators import _EVENT_REGISTRY
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -12,27 +13,7 @@ HUB_DATA = '[{"name":"Streaming"}]'
 SUBSCRIBE_MSG = {
     "H": "Streaming",
     "M": "Subscribe",
-    "A": [
-        [
-            "CarData", # Paid
-            "ChampionshipPrediction", # Paid
-            "DriverList",
-            "ExtrapolatedClock",
-            "Heartbeat",
-            "LapCount", # Paid
-            "PitLaneTimeCollection",
-            "PitStopSeries", # Paid
-            "Position", # Paid
-            "RaceControlMessages",
-            "SessionInfo",
-            "TeamRadio",
-            "TimingAppData",
-            "TimingStats",
-            "TimingData",
-            "TrackStatus",
-            "WeatherData",
-        ]
-    ],
+    "A": [list(_EVENT_REGISTRY.keys())],
     "I": 1,
 }
 
@@ -66,7 +47,7 @@ class F1SignalRClient(Notifiable):
         if observer in self._observers:
             self._observers.remove(observer)
 
-    def notify(self, message: Any) -> None:
+    def notify(self, message: "Event") -> None:
         for observer in self._observers:
             try:
                 observer.update(self, message)

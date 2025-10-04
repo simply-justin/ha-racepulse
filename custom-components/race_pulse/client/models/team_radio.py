@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -22,8 +24,9 @@ class TeamRadioCapture:
     path: str
 
 
+@register_event(LiveTimingEvent.TEAM_RADIO)
 @dataclass(frozen=True)
-class TeamRadio:
+class TeamRadio(Event):
     """
     Collection of all captured team radio messages for a session.
 

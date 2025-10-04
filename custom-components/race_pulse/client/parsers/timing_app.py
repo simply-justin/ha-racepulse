@@ -1,15 +1,15 @@
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.timing_app import TimingApp, TimingAppLine
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, TimingApp, DriverStints, Stint
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.TIMING_APP_DATA.value)
+@register_parser(LiveTimingEvent.TIMING_APP_DATA)
 class TimingAppParser(EventParser):
     """Parse 'TimingAppData' into TimingApp dataclass."""
 
-    def parse(self, raw: Dict[str, Any]) -> TimingApp:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> TimingApp:
+        p = raw.payload
         lines = {
             num: TimingAppLine(
                 last_lap_time=line.get("LastLapTime"),

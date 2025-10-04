@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -73,7 +75,7 @@ class DriverStat:
     Sector timing information for a driver.
 
     Raw example:
-        {
+        "1": {
             "Line": 1,
             "RacingNumber": "1",
             "PersonalBestLapTime": {
@@ -95,8 +97,9 @@ class DriverStat:
     best_speeds: BestSpeed
 
 
+@register_event(LiveTimingEvent.TIMING_STATS)
 @dataclass(frozen=True)
-class TimingStats:
+class TimingStats(Event):
     """
     Timing statistics for all drivers.
     Source: SignalR event "TimingStats".

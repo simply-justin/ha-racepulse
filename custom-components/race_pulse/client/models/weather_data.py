@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
+@register_event(LiveTimingEvent.WEATHER_DATA)
 @dataclass(frozen=True)
-class WeatherData:
+class WeatherData(Event):
     """
     Current weather and track conditions.
 

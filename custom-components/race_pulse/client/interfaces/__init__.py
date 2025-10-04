@@ -1,11 +1,11 @@
 from .observable import Observable
 from .notifiable import Notifiable
-from .event_parser import EventParser, register_parser, _PARSER_REGISTRY
+from .event import Event
+from .event_parser import EventParser
 
 __all__ = [
     "Observable",
     "Notifiable",
+    "Event",
     "EventParser",
-    "register_parser",
-    "_PARSER_REGISTRY",
 ]

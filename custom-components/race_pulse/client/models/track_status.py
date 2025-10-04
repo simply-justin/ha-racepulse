@@ -1,9 +1,12 @@
 from dataclasses import dataclass
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
+@register_event(LiveTimingEvent.TRACK_STATUS)
 @dataclass(frozen=True)
-class TrackStatus:
+class TrackStatus(Event):
     """
     Current track status information.
 

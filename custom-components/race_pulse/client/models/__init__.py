@@ -17,7 +17,7 @@ from .timing_data import (
     Sector,
     Segment,
 )
-from .timing_stat import TimingStats, DriverStat, BestSpeed, PersonalBestLapTime, Stat
+from .timing_stats import TimingStats, DriverStat, BestSpeed, PersonalBestLapTime, Stat
 from .track_status import TrackStatus
 from .weather_data import WeatherData
 

@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict
+from ..interfaces import Event
 from ..enums import LiveTimingEvent
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -9,7 +11,7 @@ class Driver:
     Metadata about a Formula 1 driver.
 
     Raw example:
-        {
+        "1" : {
             "RacingNumber": "1",
             "BroadcastName": "M VERSTAPPEN",
             "FullName": "Max VERSTAPPEN",
@@ -39,8 +41,9 @@ class Driver:
     public_id_right: str
 
 
+@register_event(LiveTimingEvent.DRIVER_LIST.value)
 @dataclass(frozen=True)
-class DriverList:
+class DriverList(Event):
     """
     A collection of all drivers in the session.
 

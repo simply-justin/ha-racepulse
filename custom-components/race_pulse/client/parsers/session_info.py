@@ -1,16 +1,16 @@
 from datetime import datetime
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.session_info import SessionInfo, MeetingDetail, CircuitDetail
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, SessionInfo, ArchiveStatus, Meeting, Country, Circuit
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.SESSION_INFO.value)
+@register_parser(LiveTimingEvent.SESSION_INFO)
 class SessionInfoParser(EventParser):
     """Parse 'SessionInfo' into SessionInfo dataclass."""
 
-    def parse(self, raw: Dict[str, Any]) -> SessionInfo:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> SessionInfo:
+        p = raw.payload
         circuit = (
             CircuitDetail(
                 circuit_id=p.get("Circuit", {}).get("Key"),

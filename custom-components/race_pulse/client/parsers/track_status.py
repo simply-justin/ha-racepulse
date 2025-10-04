@@ -1,22 +1,18 @@
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.track_status import TrackStatus
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, TrackStatus
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.TRACK_STATUS.value)
+@register_parser(LiveTimingEvent.TRACK_STATUS)
 class TrackStatusParser(EventParser):
     """Parse 'TrackStatus' event into TrackStatus dataclass."""
 
-    def parse(self, raw: Dict[str, Any]) -> TrackStatus:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> TrackStatus:
+        p = raw.payload
         return TrackStatus(
-            status_flag=p.get("Status", "unknown"),
+            status=p.get(
+                "Status", "unknown"
+            ),  # TODO: Make this convert to an enum when its implemented
             message=p.get("Message"),
         )
-
-        # "TrackStatus": {
-        #     "Status": "1",
-        #     "Message": "AllClear",
-        #     "_kf": true
-        # },

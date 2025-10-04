@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -147,7 +149,7 @@ class DriverTiming:
     Sector timing information for a driver.
 
     Raw example:
-        {
+        "1": {
             "TimeDiffToFastest": "+0.143",
             "TimeDiffToPositionAhead": "+0.011",
             "Line": 3,
@@ -188,15 +190,16 @@ class DriverTiming:
     stopped: bool
     status: int
     sectors: List[Sector]
-    speeds: Speed
-    best_lap_time: BestLapTime
-    last_lap_time: LastLapTime
+    speeds: Optional[Speed]
+    best_lap_time: Optional[BestLapTime]
+    last_lap_time: Optional[LastLapTime]
     number_of_laps: int
     number_of_pit_stops: int
 
 
+@register_event(LiveTimingEvent.TIMING_DATA)
 @dataclass(frozen=True)
-class TimingData:
+class TimingData(Event):
     """
     Full live timing dataset.
 

@@ -1,15 +1,15 @@
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.timing import Timing, DriverTiming
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, TimingData, DriverTiming, LastLapTime, BestLapTime, Speed, SpeedData, Sector, Segment
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.TIMING.value)
+@register_parser(LiveTimingEvent.TIMING)
 class TimingDataParser(EventParser):
     """Parse 'TimingData' into Timing with per-driver timing info."""
 
-    def parse(self, raw: Dict[str, Any]) -> Timing:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> TimingData:
+        p = raw.payload
         drivers = {}
         for num, line in p.get("Lines", {}).items():
             drivers[num] = DriverTiming(
@@ -17,7 +17,4 @@ class TimingDataParser(EventParser):
                 gap_to_leader=line.get("GapToLeader"),
                 last_lap_time=line.get("LastLapTime"),
             )
-        return Timing(drivers=drivers)
-
-
-s
+        return TimingData(drivers=drivers)

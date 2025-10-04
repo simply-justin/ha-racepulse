@@ -1,6 +1,9 @@
 from dataclasses import dataclass
-from . import Session, Meeting
+from datetime import timedelta
+from . import Meeting
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -17,8 +20,9 @@ class ArchiveStatus:
     status: str  # TODO: Make enum
 
 
+@register_event(LiveTimingEvent.SESSION_INFO)
 @dataclass(frozen=True)
-class SessionInfo(Session):
+class SessionInfo(Event):
     """
     Metadata about a Formula 1 session.
 
@@ -48,3 +52,11 @@ class SessionInfo(Session):
     meeting: Meeting
     session_status: str  # TODO: Make enum -> Scheduled / InProgress / Finalised
     archive_status: ArchiveStatus
+    key: int
+    type: str
+    number: int
+    name: str
+    start_date: timedelta
+    end_date: timedelta
+    gmt_offset: timedelta
+    path: str

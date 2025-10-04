@@ -1,22 +1,25 @@
 from datetime import datetime
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.race_control_messages import RaceControlMessages, RaceControlMessage
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, RaceControlMessages, RaceControlMessage
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.RACE_CONTROL_MESSAGES.value)
+@register_parser(LiveTimingEvent.RACE_CONTROL_MESSAGES)
 class RaceControlMessagesParser(EventParser):
     """Parse 'RaceControlMessages' into RaceControlMessages dataclass."""
 
-    def parse(self, raw: Dict[str, Any]) -> RaceControlMessages:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> RaceControlMessages:
+        p = raw.payload
         messages = [
             RaceControlMessage(
-                timestamp_utc=datetime.fromisoformat(m["Utc"]),
-                text=m["Message"],
+                datetime_utc=datetime.fromisoformat(m["Utc"]),
+                category=m.get("Category", None),
+                flag=m.get("Flag", None),
+                scope=m.get("Scope", None),
+                sector=m.get("Sector", None),
+                message=m.get("Message", "")
             )
             for m in p.get("Messages", [])
         ]
         return RaceControlMessages(messages=messages)
-aa

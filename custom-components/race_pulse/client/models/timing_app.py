@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Dict
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -37,7 +39,7 @@ class DriverStints:
     Tyre stint and strategy data for a driver.
 
     Raw example:
-        {
+        "1": {
             "RacingNumber": "1",
             "Line": 3,
             "Stints": [
@@ -51,8 +53,9 @@ class DriverStints:
     stints: Dict[str, Stint]
 
 
+@register_event(LiveTimingEvent.TIMING_APP)
 @dataclass(frozen=True)
-class TimingApp:
+class TimingApp(Event):
     """
     Strategy and tyre data for all drivers.
 

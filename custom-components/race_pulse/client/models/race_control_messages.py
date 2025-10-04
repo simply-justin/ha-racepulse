@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
 @dataclass(frozen=True)
@@ -40,8 +42,9 @@ class RaceControlMessage:
     message: str
 
 
+@register_event(LiveTimingEvent.RACE_CONTROL_MESSAGES)
 @dataclass(frozen=True)
-class RaceControlMessages:
+class RaceControlMessages(Event):
     """
     Collection of race control messages during a session.
 

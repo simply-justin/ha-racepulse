@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from datetime import datetime
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
+@register_event(LiveTimingEvent.HEARTBEAT)
 @dataclass(frozen=True)
-class Heartbeat:
+class Heartbeat(Event):
     """
     A live timing heartbeat event.
 

@@ -1,18 +1,18 @@
-from datetime import timedelta
-from typing import Dict, Any
-from ..interfaces import EventParser, register_parser
-from ..models.extrapolated_clock import ExtrapolatedClock
+from datetime import datetime, timedelta
+from ..interfaces import EventParser
+from ..models import RawTimingEvent, ExtrapolatedClock
 from ..enums import LiveTimingEvent
+from ..decorators import register_parser
 
 
-@register_parser(LiveTimingEvent.EXTRAPOLATED_CLOCK.value)
+@register_parser(LiveTimingEvent.EXTRAPOLATED_CLOCK)
 class ExtrapolatedClockParser(EventParser):
     """Parse 'ExtrapolatedClock' into ExtrapolatedClock dataclass."""
 
-    def parse(self, raw: Dict[str, Any]) -> ExtrapolatedClock:
-        p = raw.get("Json", {})
+    def parse(self, raw: "RawTimingEvent") -> ExtrapolatedClock:
+        p = raw.payload
         return ExtrapolatedClock(
-            elapsed_time=timedelta(seconds=float(p.get("Utc", 0))),
-            remaining_time=timedelta(seconds=float(p.get("Remaining", 0))),
-            is_extrapolating=bool(p.get("Extrapolating", False)),
+            datetime_utc=datetime.fromisoformat(p.get["Utc"]),
+            remaining_time=datetime.strptime(p.get("Remaining", "00:00:00"), "%H:%M:%S").time(),
+            extrapolating=bool(p.get("Extrapolating", False))
         )

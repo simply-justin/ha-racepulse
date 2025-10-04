@@ -1,10 +1,13 @@
 from dataclasses import dataclass
 from datetime import timedelta
 from ..enums import LiveTimingEvent
+from ..interfaces import Event
+from ..decorators import register_event
 
 
+@register_event(LiveTimingEvent.EXTRAPOLATED_CLOCK)
 @dataclass(frozen=True)
-class ExtrapolatedClock:
+class ExtrapolatedClock(Event):
     """
     Extrapolated session clock.
 
