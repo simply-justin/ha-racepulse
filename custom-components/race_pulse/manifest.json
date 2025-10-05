@@ -5,7 +5,7 @@
   "documentation": "https://github.com/simply-justin/ha-racepulse",
   "issue_tracker": "https://github.com/simply-justin/ha-racepulse/issues",
   "codeowners": ["@simply-justin"],
-  "config_flow": true,
+  "config_flow": false,
   "dependencies": [],
   "requirements": [],
   "iot_class": "cloud_polling",
