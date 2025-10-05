@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, List
 from ..interfaces import EventParser
 from ..models import (
     RawTimingEvent,
@@ -10,51 +10,63 @@ from ..models import (
 )
 from ..enums import LiveTimingEvent
 from ..decorators import register_parser
+from ...helpers import parse_int
 
 
 @register_parser(LiveTimingEvent.TIMING_STATS)
 class TimingStatsParser(EventParser):
-    """Parse 'TimingStats' into TimingStats dataclass."""
+    """Parses 'TimingStats' events into a `TimingStats` dataclass."""
 
-    def parse(self, raw: "RawTimingEvent") -> TimingStats:
-        p = raw.payload
+    def parse(self, raw: RawTimingEvent) -> TimingStats:
+        payload = raw.payload
         lines: Dict[str, DriverStat] = {}
-        for num, line in p.get("Lines", {}).items():
-            personal_best_lap_time: PersonalBestLapTime | None = None
-            best_sectors: list[Stat] = []
-            best_speeds: BestSpeed | None = None
 
-            if "PersonalBestLapTime" in line:
-                PersonalBestLapTime(
-                    value=line["PersonalBestLapTime"].get("Value", ""),
-                    lap=int(line["PersonalBestLapTime"].get("Lap", 0)),
-                    position=int(line["PersonalBestLapTime"].get("Position", 0)),
+        for num, data in payload.get("Lines", {}).items():
+            # --- Personal best lap time ---
+            personal_best_lap_time = None
+            pblt_data = data.get("PersonalBestLapTime")
+            if pblt_data:
+                personal_best_lap_time = PersonalBestLapTime(
+                    value=pblt_data.get("Value", ""),
+                    lap=parse_int(pblt_data.get("Lap")),
+                    position=parse_int(pblt_data.get("Position")),
                 )
 
-            if "BestSectors" in line:
-                for sector in line["BestSectors"]:
-                    best_sectors.append(
-                        Stat(
-                            value=sector.get("Value", ""),
-                            position=int(sector.get("Position", 0)),
-                        )
+            # --- Best sectors ---
+            best_sectors: List[Stat] = []
+            for sector in data.get("BestSectors", []):
+                best_sectors.append(
+                    Stat(
+                        value=sector.get("Value", ""),
+                        position=parse_int(sector.get("Position")),
                     )
+                )
 
-            if "BestSpeeds" in line:
-                best_speeds = {
-                    k: Stat(
-                        value=stat.get("Value", ""),
-                        position=int(stat.get("Position", 0)),
-                    )
-                    for k, stat in line.get("BestSpeeds", {}).items()
-                }
+            # --- Best speeds ---
+            best_speeds = None
+            bs_data = data.get("BestSpeeds")
+            if bs_data:
+                best_speeds = BestSpeed(
+                    i1=self._parse_stat(bs_data.get("I1")),
+                    i2=self._parse_stat(bs_data.get("I2")),
+                    fl=self._parse_stat(bs_data.get("FL")),
+                    st=self._parse_stat(bs_data.get("ST")),
+                )
 
+            # --- Driver stat ---
             lines[num] = DriverStat(
-                line=int(line.get("Line", 0)),
-                racing_number=int(line.get("RacingNumber", 0)),
+                line=parse_int(data.get("Line")),
+                racing_number=parse_int(data.get("RacingNumber")),
                 personal_best_lap_time=personal_best_lap_time,
                 best_sectors=best_sectors,
                 best_speeds=best_speeds,
             )
 
         return TimingStats(lines=lines)
+
+    # --- Helper conversion methods ---
+    @staticmethod
+    def _parse_stat(data) -> Stat:
+        if not data:
+            return Stat(value="", position=0)
+        return Stat(value=data.get("Value", ""), position=int(data.get("Position", 0)))

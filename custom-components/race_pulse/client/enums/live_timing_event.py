@@ -1,10 +1,29 @@
 from enum import Enum
 
 
-class LiveTimingEvent(Enum):
+class LiveTimingEvent(str, Enum):
     """
-    Enumeration of all supported live timing events.
-    Each enum value is linked to its corresponding model class.
+    Enumeration of all supported Formula 1 live timing event types.
+
+    Each enum member corresponds directly to the SignalR "Type"
+    field in the raw event payload.
+
+    Example:
+        {
+            "Type": "WeatherData",
+            "DateTime": "2025-10-03T15:30:00Z",
+            "Json": {
+                "AirTemp": "28.5",
+                "Humidity": "73.0",
+                ...
+            }
+        }
+
+    Usage:
+        >>> LiveTimingEvent.WEATHER_DATA.value
+        'WeatherData'
+        >>> str(LiveTimingEvent.WEATHER_DATA)
+        'WeatherData'
     """
 
     DRIVER_LIST = "DriverList"
@@ -18,3 +37,7 @@ class LiveTimingEvent(Enum):
     TIMING_DATA = "TimingData"
     TRACK_STATUS = "TrackStatus"
     WEATHER_DATA = "WeatherData"
+
+    def __str__(self) -> str:
+        """Return the raw event string (e.g. 'WeatherData')."""
+        return self.value

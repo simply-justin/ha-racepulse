@@ -2,17 +2,17 @@ from ..interfaces import EventParser
 from ..models import RawTimingEvent, TrackStatus
 from ..enums import LiveTimingEvent
 from ..decorators import register_parser
+from ...helpers import parse_string
 
 
 @register_parser(LiveTimingEvent.TRACK_STATUS)
 class TrackStatusParser(EventParser):
-    """Parse 'TrackStatus' event into TrackStatus dataclass."""
+    """Parses 'TrackStatus' events into a `TrackStatus` dataclass."""
 
-    def parse(self, raw: "RawTimingEvent") -> TrackStatus:
-        p = raw.payload
+    def parse(self, raw: RawTimingEvent) -> TrackStatus:
+        payload = raw.payload or {}
+
         return TrackStatus(
-            status=p.get(
-                "Status", "unknown"
-            ),  # TODO: Make this convert to an enum when its implemented
-            message=p.get("Message"),
+            status=parse_string(payload.get("Status", "unknown")),
+            message=parse_string(payload.get("Message", "")),
         )

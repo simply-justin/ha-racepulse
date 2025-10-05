@@ -1,17 +1,43 @@
 from typing import Callable, Dict, Type
 from ..interfaces import EventParser
+from ..enums import LiveTimingEvent
 
-_PARSER_REGISTRY: Dict[str, Type["EventParser"]] = {}
+# Global registry for parser classes keyed by their LiveTimingEvent type
+_PARSER_REGISTRY: Dict[LiveTimingEvent, Type[EventParser]] = {}
 
-def register_parser(
-    event_type: str,
-) -> Callable[[Type["EventParser"]], Type["EventParser"]]:
+
+def register_parser(event_type: LiveTimingEvent) -> Callable[[Type[EventParser]], Type[EventParser]]:
     """
-    Decorator to auto-register a parser class for a given SignalR 'Type' string.
-    Open/Closed: new event = new class + decorator; no factory edits.
+    Decorator to register an EventParser class for a given LiveTimingEvent type.
+
+    Example:
+        @register_parser(LiveTimingEvent.WEATHER)
+        class WeatherDataParser(EventParser[WeatherData]):
+            def parse(self, raw: RawTimingEvent) -> WeatherData:
+                ...
+
+    This system allows new event parsers to be added without modifying the factory:
+    simply define a new parser and apply the decorator.
+
+    Args:
+        event_type: A member of the `LiveTimingEvent` enum representing the event to handle.
+
+    Returns:
+        The same class, after registration.
     """
 
-    def _wrap(cls: Type["EventParser"]) -> Type["EventParser"]:
+    def _wrap(cls: Type[EventParser]) -> Type[EventParser]:
+        # Ensure valid subclass
+        if not issubclass(cls, EventParser):
+            raise TypeError(
+                f"@register_parser({event_type}) can only be applied to subclasses of EventParser, got {cls.__name__}"
+            )
+
+        # Warn if overwriting an existing parser
+        if event_type in _PARSER_REGISTRY:
+            existing = _PARSER_REGISTRY[event_type].__name__
+            print(f"[register_parser] Warning: Overwriting existing parser for {event_type} (was {existing})")
+
         _PARSER_REGISTRY[event_type] = cls
         return cls
 

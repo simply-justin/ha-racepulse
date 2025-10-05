@@ -1,14 +1,17 @@
-from datetime import datetime
 from ..interfaces import EventParser
 from ..models import RawTimingEvent, Heartbeat
 from ..enums import LiveTimingEvent
 from ..decorators import register_parser
+from ...helpers import parse_datetime
 
 
 @register_parser(LiveTimingEvent.HEARTBEAT)
 class HeartbeatParser(EventParser):
-    """Parse 'Heartbeat' event into Heartbeat dataclass."""
+    """Parses 'Heartbeat' events into a `Heartbeat` dataclass."""
 
-    def parse(self, raw: "RawTimingEvent") -> Heartbeat:
-        ts = datetime.fromisoformat(raw.payload["Utx"].replace("Z", "+00:00"))
-        return Heartbeat(datetime_utc=ts)
+    def parse(self, raw: RawTimingEvent) -> Heartbeat:
+        payload = raw.payload
+
+        return Heartbeat(
+            datetime_utc=parse_datetime((payload.get("Utc").replace("Z", "+00:00")))
+        )
