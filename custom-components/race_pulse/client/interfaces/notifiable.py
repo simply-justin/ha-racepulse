@@ -1,14 +1,13 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Generic, TypeVar
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .observable import Observable
+    from .event import Event
 
-T = TypeVar("T")
 
-
-class Notifiable(ABC, Generic[T]):
+class Notifiable(ABC):
     """
     Abstract base class representing a subject that can notify observers.
 
@@ -21,32 +20,32 @@ class Notifiable(ABC, Generic[T]):
     how they respond to updates.
 
     Example:
-        class WeatherStation(Notifiable[str]):
+        class WeatherStation(Notifiable):
             def __init__(self):
                 self._observers = set()
 
-            def attach(self, observer: Observable[str]) -> None:
+            def attach(self, observer: Observable) -> None:
                 self._observers.add(observer)
 
-            def detach(self, observer: Observable[str]) -> None:
+            def detach(self, observer: Observable) -> None:
                 self._observers.discard(observer)
 
-            def notify(self, message: str) -> None:
+            def notify(self, message: Event) -> None:
                 for obs in self._observers:
                     obs.update(message)
     """
 
     @abstractmethod
-    def attach(self, observer: Observable[T]) -> None:
+    def attach(self, observer: Observable) -> None:
         """Register an observer to receive updates."""
         raise NotImplementedError
 
     @abstractmethod
-    def detach(self, observer: Observable[T]) -> None:
+    def detach(self, observer: Observable) -> None:
         """Unregister an observer so it no longer receives updates."""
         raise NotImplementedError
 
     @abstractmethod
-    def notify(self, message: T) -> None:
+    def notify(self, message: Event) -> None:
         """Notify all registered observers with a message."""
         raise NotImplementedError

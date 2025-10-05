@@ -6,7 +6,7 @@ from ...helpers import parse_int, parse_datetime
 
 
 @register_parser(LiveTimingEvent.RACE_CONTROL_MESSAGES)
-class RaceControlMessagesParser(EventParser):
+class RaceControlMessagesParser(EventParser[RaceControlMessages]):
     """Parses 'RaceControlMessages' events into a `RaceControlMessages` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> RaceControlMessages:

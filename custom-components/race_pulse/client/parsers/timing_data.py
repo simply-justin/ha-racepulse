@@ -16,7 +16,7 @@ from ...helpers import parse_int, parse_bool
 
 
 @register_parser(LiveTimingEvent.TIMING_DATA)
-class TimingDataParser(EventParser):
+class TimingDataParser(EventParser[TimingData]):
     """Parses 'TimingData' events into a fully structured `TimingData` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> TimingData:

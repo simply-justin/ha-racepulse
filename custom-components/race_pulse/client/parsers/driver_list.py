@@ -6,7 +6,7 @@ from ...helpers import parse_int
 
 
 @register_parser(LiveTimingEvent.DRIVER_LIST)
-class DriverListParser(EventParser):
+class DriverListParser(EventParser[DriverList]):
     """
     Parses a raw 'DriverList' event payload into a structured `DriverList` dataclass.
 

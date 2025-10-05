@@ -6,7 +6,7 @@ from ...helpers import parse_float
 
 
 @register_parser(LiveTimingEvent.WEATHER)
-class WeatherDataParser(EventParser):
+class WeatherDataParser(EventParser[WeatherData]):
     """
     Parses a 'WeatherData' event payload into a `WeatherData` dataclass.
 

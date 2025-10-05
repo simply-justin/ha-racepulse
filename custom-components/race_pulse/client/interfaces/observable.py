@@ -1,13 +1,12 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Protocol, TypeVar, Generic
+from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
     from .notifiable import Notifiable
+    from .event import Event
 
-T = TypeVar("T")
 
-
-class Observable(Protocol, Generic[T]):
+class Observable(Protocol):
     """
     Observer interface for receiving updates from subjects.
 
@@ -17,12 +16,12 @@ class Observable(Protocol, Generic[T]):
     the subject's state changes.
 
     Example:
-        class Dashboard(Observable[str]):
-            def update(self, subject: Notifiable[str], message: str) -> None:
+        class Dashboard(Observable):
+            def update(self, subject: Notifiable, message: Event) -> None:
                 print(f"Dashboard received: {message}")
     """
 
-    def update(self, subject: Notifiable[T], message: T) -> None:
+    def update(self, subject: Notifiable, message: Event) -> None:
         """
         Called by the subject when notifying observers.
 

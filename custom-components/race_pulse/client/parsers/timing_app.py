@@ -6,7 +6,7 @@ from ...helpers import parse_int, parse_bool
 
 
 @register_parser(LiveTimingEvent.TIMING_APP)
-class TimingAppParser(EventParser):
+class TimingAppParser(EventParser[TimingApp]):
     """Parses 'TimingApp' events into a `TimingApp` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> TimingApp:

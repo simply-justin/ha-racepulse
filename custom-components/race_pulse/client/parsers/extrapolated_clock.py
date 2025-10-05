@@ -6,7 +6,7 @@ from ...helpers import parse_bool, parse_datetime, parse_timedelta
 
 
 @register_parser(LiveTimingEvent.EXTRAPOLATED_CLOCK)
-class ExtrapolatedClockParser(EventParser):
+class ExtrapolatedClockParser(EventParser[ExtrapolatedClock]):
     """Parses 'ExtrapolatedClock' payloads into an `ExtrapolatedClock` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> ExtrapolatedClock:

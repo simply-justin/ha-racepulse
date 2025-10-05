@@ -1,11 +1,14 @@
 import asyncio
 import logging
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict
 from aiohttp import ClientSession, WSMsgType, ClientWebSocketResponse
 from .interfaces import Event, Notifiable, Observable
 from .event_factory import EventFactory
 from .decorators import _EVENT_REGISTRY
 
+
+if TYPE_CHECKING:
+    from .interfaces import Event, Observable
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -17,6 +20,10 @@ SUBSCRIBE_MSG = {
     "I": 1,
 }
 
+# TODO: Implement Paid Logic. (Getting credentials from HA)
+# TODO: Improve client
+# TODO: Improve logging
+# TODO: Improve parsing logic
 
 class F1SignalRClient(Notifiable):
     CONNECTION_URL = "wss://livetiming.formula1.com/signalr/connect"
@@ -47,7 +54,7 @@ class F1SignalRClient(Notifiable):
         if observer in self._observers:
             self._observers.remove(observer)
 
-    def notify(self, message: "Event") -> None:
+    def notify(self, message: Event) -> None:
         for observer in self._observers:
             try:
                 observer.update(self, message)
@@ -137,3 +144,50 @@ class F1SignalRClient(Notifiable):
             else:
                 self.state[event.__class__.__name__] = event
             self.notify(event)
+
+
+# async def messages(self) -> AsyncGenerator[dict, None]:
+#     """Listen to incoming websocket messages and yield parsed events."""
+#     if not self._ws:
+#         return
+
+#     index = 0
+
+#     async for msg in self._ws:
+#         if msg.type == WSMsgType.TEXT:
+#             try:
+#                 payload = json.loads(msg.data)
+#             except json.JSONDecodeError:
+#                 continue
+
+#             _LOGGER.debug("Stream payload %s: %s", index, payload)
+#             index += 1
+
+#             # Case 1: message bundle from SignalR ("M")
+#             for hub_msg in payload.get("M", []):
+#                 if hub_msg.get("M") == "feed":
+#                     stream_name = hub_msg["A"][0]
+#                     raw_data = hub_msg["A"][1]
+
+#                     event_type = LiveTimingEvent.from_value(stream_name)
+#                     if not event_type:
+#                         _LOGGER.debug("Unknown stream: %s", stream_name)
+#                         continue
+
+#                     parsed = EventFactory.parse(event_type, raw_data)
+#                     _LOGGER.debug("%s message: %s", stream_name, raw_data)
+#                     yield parsed
+
+#             # Case 2: response payload ("R")
+#             for stream_name, raw_data in payload.get("R", {}).items():
+#                 event_type = LiveTimingEvent.from_value(stream_name)
+#                 if not event_type:
+#                     _LOGGER.debug("Unknown stream: %s", stream_name)
+#                     continue
+
+#                 parsed = EventFactory.parse(event_type, raw_data)
+#                 _LOGGER.debug("%s message: %s", stream_name, raw_data)
+#                 yield parsed
+
+#         elif msg.type in (WSMsgType.CLOSED, WSMsgType.ERROR):
+#             break

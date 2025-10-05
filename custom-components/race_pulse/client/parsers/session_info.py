@@ -13,7 +13,7 @@ from ...helpers import parse_int, parse_datetime, parse_timedelta
 
 
 @register_parser(LiveTimingEvent.SESSION_INFO)
-class SessionInfoParser(EventParser):
+class SessionInfoParser(EventParser[SessionInfo]):
     """Parses 'SessionInfo' events into a `SessionInfo` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> SessionInfo:

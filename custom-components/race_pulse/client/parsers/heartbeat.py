@@ -6,7 +6,7 @@ from ...helpers import parse_datetime
 
 
 @register_parser(LiveTimingEvent.HEARTBEAT)
-class HeartbeatParser(EventParser):
+class HeartbeatParser(EventParser[Heartbeat]):
     """Parses 'Heartbeat' events into a `Heartbeat` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> Heartbeat:

@@ -6,7 +6,7 @@ from ...helpers import parse_int, parse_datetime
 
 
 @register_parser(LiveTimingEvent.TEAM_RADIO)
-class TeamRadioParser(EventParser):
+class TeamRadioParser(EventParser[TeamRadio]):
     """Parses 'TeamRadio' events into a `TeamRadio` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> TeamRadio:

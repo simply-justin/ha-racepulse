@@ -6,7 +6,7 @@ from ...helpers import parse_string
 
 
 @register_parser(LiveTimingEvent.TRACK_STATUS)
-class TrackStatusParser(EventParser):
+class TrackStatusParser(EventParser[TrackStatus]):
     """Parses 'TrackStatus' events into a `TrackStatus` dataclass."""
 
     def parse(self, raw: RawTimingEvent) -> TrackStatus:
