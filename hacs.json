@@ -4,6 +4,6 @@
   "content_in_root": false,
   "domains": ["binary_sensor", "sensor", "switch"],
   "iot_class": "Cloud Polling",
-  "hacs": "1.6.0",
-  "homeassistant": "0.118.0"
+  "homeassistant": "2025.2.4",
+  "hacs": "2.0.5"
 }
