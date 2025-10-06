@@ -2,7 +2,7 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 
-from .const import DOMAIN
+from .const import DOMAIN, NAME
 
 
 class F1FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -18,7 +18,7 @@ class F1FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
 
         data_schema = vol.Schema(
             {
-                vol.Required("sensor_name", default="F1"): cv.string,
+                vol.Required("sensor_name", default=NAME): cv.string,
                 vol.Optional(
                     "live_delay_seconds", default=0
                 ): vol.All(vol.Coerce(int), vol.Range(min=0, max=300)),

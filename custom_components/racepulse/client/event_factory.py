@@ -1,8 +1,9 @@
 from typing import Any, Dict, Union, Type
 from datetime import datetime, timezone
-from .enums import LiveTimingEvent
-from .interfaces import _PARSER_REGISTRY, EventParser, Event
-from .models import RawTimingEvent
+from .enums.live_timing_event import LiveTimingEvent
+from .interfaces.event_parser import _PARSER_REGISTRY
+from .interfaces.event import Event
+from .models.raw_timing_event import RawTimingEvent
 
 
 class EventFactory:
@@ -29,6 +30,8 @@ class EventFactory:
             A parsed dataclass instance if a parser is registered and succeeds,
             otherwise a fallback `RawTimingEvent`.
         """
+        from .interfaces import EventParser
+
         parser_cls: Type[EventParser] | None = _PARSER_REGISTRY.get(event_type)
 
         # Build a fallback RawTimingEvent immediately

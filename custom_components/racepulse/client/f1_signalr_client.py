@@ -4,8 +4,10 @@ import json
 import logging
 from typing import TYPE_CHECKING, Optional, Tuple
 
-from .enums import LiveTimingEvent
-from .interfaces import Event, Notifiable, Observable
+from .enums.live_timing_event import LiveTimingEvent
+from .interfaces.event import Event
+from .interfaces.notifiable import Notifiable
+from .interfaces.observable import Observable
 from .event_factory import EventFactory
 from .decorators import _EVENT_REGISTRY
 from ..const import DOMAIN

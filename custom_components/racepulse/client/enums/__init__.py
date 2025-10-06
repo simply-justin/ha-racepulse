@@ -1,3 +1,1 @@
-from .live_timing_event import LiveTimingEvent
-
-__all__ = ["LiveTimingEvent"]
+"""Enum definitions for the RacePulse F1 client."""

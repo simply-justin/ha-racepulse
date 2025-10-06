@@ -1,7 +1,9 @@
 import json
+from pathlib import Path
 from homeassistant.const import Platform
 
-with open('manifest.json', 'r', encoding='utf-8') as f:
+manifest_path = Path(__file__).parent / "manifest.json"
+with open(manifest_path, "r", encoding="utf-8") as f:
     manifest = json.load(f)
 
 NAME = manifest.get('name')

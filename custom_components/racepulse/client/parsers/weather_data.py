@@ -1,7 +1,8 @@
-from ..enums import LiveTimingEvent
-from ..models import RawTimingEvent, WeatherData
-from ..interfaces import EventParser
-from ..decorators import register_parser
+from ..enums.live_timing_event import LiveTimingEvent
+from ..models.raw_timing_event import RawTimingEvent
+from ..models.weather_data import WeatherData
+from ..interfaces.event_parser import EventParser
+from ..decorators.parser import register_parser
 from ...helpers import parse_float
 
 
