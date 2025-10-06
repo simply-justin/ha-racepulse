@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Optional
 
 
 class LiveTimingEvent(str, Enum):
@@ -41,3 +42,22 @@ class LiveTimingEvent(str, Enum):
     def __str__(self) -> str:
         """Return the raw event string (e.g. 'WeatherData')."""
         return self.value
+
+    @classmethod
+    def try_from(cls, value: str) -> Optional["LiveTimingEvent"]:
+        """
+        Attempt to create a LiveTimingEvent from a string.
+        Returns None if the string doesn't match any known event type.
+
+        Example:
+            >>> LiveTimingEvent.try_from("WeatherData")
+            <LiveTimingEvent.WEATHER_DATA: 'WeatherData'>
+            >>> LiveTimingEvent.try_from("UnknownEvent")
+            None
+        """
+        if not isinstance(value, str):
+            return None
+        try:
+            return cls(value)
+        except ValueError:
+            return None

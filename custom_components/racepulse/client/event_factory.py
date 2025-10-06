@@ -1,7 +1,7 @@
 from typing import Any, Dict, Union, Type
 from datetime import datetime, timezone
 from .enums import LiveTimingEvent
-from .interfaces import _PARSER_REGISTRY, EventParser
+from .interfaces import _PARSER_REGISTRY, EventParser, Event
 from .models import RawTimingEvent
 
 
@@ -17,7 +17,7 @@ class EventFactory:
     """
 
     @staticmethod
-    def parse(event_type: LiveTimingEvent, raw: Dict[str, Any]) -> Union[object, RawTimingEvent]:
+    def parse(event_type: LiveTimingEvent, raw: Dict[str, Any]) -> Union[Event, RawTimingEvent]:
         """
         Parse a raw SignalR event dictionary into a typed dataclass.
 
