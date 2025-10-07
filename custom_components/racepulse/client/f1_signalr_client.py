@@ -73,7 +73,9 @@ class F1SignalRClient(Notifiable):
             try:
                 observer.update(self, message)
             except Exception:
-                _LOGGER.exception("[%s] Failed to notify observer: %s", DOMAIN, observer)
+                _LOGGER.exception(
+                    "[%s] Failed to notify observer: %s", DOMAIN, observer
+                )
 
     # ---------------- Connection Lifecycle ----------------
     async def connect(self) -> None:
@@ -132,7 +134,9 @@ class F1SignalRClient(Notifiable):
                     _LOGGER.info("[%s] Reconnect disabled — stopping client", DOMAIN)
                     break
 
-                _LOGGER.warning("[%s] Disconnected — reconnecting in %s s", DOMAIN, delay)
+                _LOGGER.warning(
+                    "[%s] Disconnected — reconnecting in %s s", DOMAIN, delay
+                )
                 await asyncio.sleep(delay)
                 delay = min(delay * self.BACK_OFF, self.MAX_RETRY_SEC)
 
@@ -140,7 +144,9 @@ class F1SignalRClient(Notifiable):
                 _LOGGER.info("[%s] Connection cancelled by user", DOMAIN)
                 break
             except Exception as e:
-                _LOGGER.warning("[%s] Connection error: %s — retrying in %s s", DOMAIN, e, delay)
+                _LOGGER.warning(
+                    "[%s] Connection error: %s — retrying in %s s", DOMAIN, e, delay
+                )
                 await asyncio.sleep(delay)
                 delay = min(delay * self.BACK_OFF, self.MAX_RETRY_SEC)
 
@@ -213,7 +219,9 @@ class F1SignalRClient(Notifiable):
                             self.notify(parsed)
 
                 elif msg.type in (WSMsgType.CLOSED, WSMsgType.ERROR):
-                    _LOGGER.error("[%s] WebSocket closed or errored: %s", DOMAIN, msg.data)
+                    _LOGGER.error(
+                        "[%s] WebSocket closed or errored: %s", DOMAIN, msg.data
+                    )
                     break
 
         except asyncio.CancelledError:

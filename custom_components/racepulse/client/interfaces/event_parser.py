@@ -4,6 +4,7 @@ from ..models import RawTimingEvent
 
 T = TypeVar("T")
 
+
 class EventParser(ABC, Generic[T]):
     """
     Abstract base class for all event parsers.

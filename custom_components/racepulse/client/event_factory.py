@@ -18,7 +18,9 @@ class EventFactory:
     """
 
     @staticmethod
-    def parse(event_type: LiveTimingEvent, raw: Dict[str, Any]) -> Union[Event, RawTimingEvent]:
+    def parse(
+        event_type: LiveTimingEvent, raw: Dict[str, Any]
+    ) -> Union[Event, RawTimingEvent]:
         """
         Parse a raw SignalR event dictionary into a typed dataclass.
 
@@ -48,7 +50,9 @@ class EventFactory:
                 return parser.parse(raw_event)
             except Exception as ex:
                 parser_name = parser_cls.__name__
-                print(f"[EventFactory] ❌ Parser '{parser_name}' failed for {event_type}: {repr(ex)}")
+                print(
+                    f"[EventFactory] ❌ Parser '{parser_name}' failed for {event_type}: {repr(ex)}"
+                )
 
         # Fallback: return the unparsed event wrapper
         return raw_event

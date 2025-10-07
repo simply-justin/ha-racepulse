@@ -40,7 +40,7 @@ async def async_setup_entry(
         "connect_task": connect_task,
     }
 
-    await hass.config_entries.async_forward_entry_setups(entry, ["sensor"])
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info("[%s] Integration setup complete", DOMAIN)
 
     return True
@@ -53,7 +53,7 @@ async def async_unload_entry(
     """Unload the F1 Live Timing config entry."""
     data = hass.data[DOMAIN].pop(entry.entry_id, None)
 
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, ["sensor"])
+    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
     if data:
         client: F1SignalRClient = data["client"]

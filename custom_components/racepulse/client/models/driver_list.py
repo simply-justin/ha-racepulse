@@ -88,4 +88,4 @@ class DriverList(Event):
     """
 
     data_type: LiveTimingEvent = LiveTimingEvent.DRIVER_LIST
-    drivers: Dict[str, Driver]
+    drivers: Dict[str, "Driver"]

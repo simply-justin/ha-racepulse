@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Dict, List, Final
+from typing import Dict, Final
 from ..enums import LiveTimingEvent
 from ..interfaces import Event
 from ..decorators import register_event

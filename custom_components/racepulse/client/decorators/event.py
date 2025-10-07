@@ -1,12 +1,17 @@
-from typing import Callable, Dict, Type
-from ..interfaces import Event
-from ..enums import LiveTimingEvent
+from typing import Callable, Dict, Type, TYPE_CHECKING
+
+
+if TYPE_CHECKING:
+    from ..enums import LiveTimingEvent
+    from ..interfaces import Event
 
 # Central event registry mapping event types to dataclass classes
-_EVENT_REGISTRY: Dict[LiveTimingEvent, Type[Event]] = {}
+_EVENT_REGISTRY: Dict["LiveTimingEvent", Type["Event"]] = {}
 
 
-def register_event(event_type: LiveTimingEvent) -> Callable[[Type[Event]], Type[Event]]:
+def register_event(
+    event_type: "LiveTimingEvent",
+) -> Callable[[Type["Event"]], Type["Event"]]:
     """
     Decorator for auto-registering a dataclass as the handler for a specific F1 Live Timing event.
 
@@ -23,7 +28,7 @@ def register_event(event_type: LiveTimingEvent) -> Callable[[Type[Event]], Type[
         A decorator that registers the dataclass into `_EVENT_REGISTRY`.
     """
 
-    def _wrap(cls: Type[Event]) -> Type[Event]:
+    def _wrap(cls: Type["Event"]) -> Type["Event"]:
         # Warn if overwriting an existing registration
         if event_type in _EVENT_REGISTRY:
             existing = _EVENT_REGISTRY[event_type].__name__
